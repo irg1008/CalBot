@@ -1,6 +1,6 @@
 # UBUCal
 
-Okat, deploy-commands es la que registra los slash (comandos).
+Okay, deploy-commands es la que registra los slash (comandos).
 
 Después el main es el bot como tal.
 
