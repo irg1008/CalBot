@@ -29,11 +29,11 @@ interface Event {
 interface BaseCommand {
 	name: string;
 	description?: string;
-	aliases?: string[];
 }
 
 interface Command extends BaseCommand {
 	execute: CommandExecute;
+	aliases?: string[];
 }
 
 interface SlashCommand extends BaseCommand {

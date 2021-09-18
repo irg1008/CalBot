@@ -4,8 +4,6 @@ import { Message } from "discord.js";
 export const event: Event = {
 	name: "messageCreate",
 	execute: (client, message: Message) => {
-		console.log(message);
-
 		const isNotCommand =
 			message.author.bot ||
 			!message.guild ||

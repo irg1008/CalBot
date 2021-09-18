@@ -1,25 +1,10 @@
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 import { ExtendedClient } from "../client";
-import { SlashCommand } from "../types/Discord.types";
 
 const getClientCommands = (client: ExtendedClient) => {
 	const slashCommands = Array.from(client.slashCommands.values());
-	const slashAliasesEntries = client.slashAliases.entries();
-	const slashAliasCommands: typeof slashCommands = [];
-
-	while (true) {
-		const { done, value } = slashAliasesEntries.next();
-		if (done) break;
-
-		const alias: string = value[0];
-		const cmd: SlashCommand = value[1];
-
-		// Change cmd name to alias:
-		slashAliasCommands.push({ ...cmd, name: alias, aliases: [] });
-	}
-
-	return [...slashCommands, ...slashAliasCommands];
+	return slashCommands;
 };
 
 const deploycommands = async (client: ExtendedClient) => {

@@ -4,8 +4,6 @@ import { GuildMember, Interaction, Message } from "discord.js";
 export const event: Event = {
 	name: "interactionCreate",
 	execute: async (client, interaction: Interaction) => {
-		console.log(interaction);
-
 		// Slash Command Handling
 		if (interaction.isCommand()) {
 			await interaction.deferReply({ ephemeral: false }).catch(() => {});

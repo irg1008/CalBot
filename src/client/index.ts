@@ -10,8 +10,7 @@ class ExtendedClient extends Client {
 	public slashCommands: Collection<string, SlashCommand> = new Collection();
 	public events: Collection<string, Event> = new Collection();
 	public config: Config = config;
-	public aliases: typeof this.commands = new Collection();
-	public slashAliases: typeof this.slashCommands = new Collection();
+	public aliases: Collection<string, Command> = new Collection();
 
 	public async init() {
 		this.login(this.config.token);
@@ -40,12 +39,6 @@ class ExtendedClient extends Client {
 			}: { command: SlashCommand } = require(`${slashPath}/${file}`);
 
 			this.slashCommands.set(command.name, command);
-
-			if (command?.aliases?.length !== 0) {
-				command.aliases?.forEach((alias) => {
-					this.slashAliases.set(alias, command);
-				});
-			}
 		});
 
 		// Events.
@@ -63,6 +56,9 @@ class ExtendedClient extends Client {
 	}
 }
 
-const client = new ExtendedClient({ intents: Intents.FLAGS.GUILDS });
+const client = new ExtendedClient({
+	partials: ["MESSAGE", "CHANNEL", "REACTION"],
+	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+});
 export { ExtendedClient };
 export default client;

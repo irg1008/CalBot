@@ -3,7 +3,6 @@ import { SlashCommand } from "../../types/Discord.types";
 export const command: SlashCommand = {
 	name: "user",
 	description: "Replies with user info!",
-	aliases: ["u"],
 	execute: async (_, interaction) => {
 		const user = interaction.user;
 
