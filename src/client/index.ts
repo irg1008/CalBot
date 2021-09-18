@@ -59,13 +59,15 @@ class ExtendedClient extends Client {
 const { FLAGS } = Intents;
 
 const client = new ExtendedClient({
-	partials: ["MESSAGE", "CHANNEL", "REACTION"],
-	intents: [FLAGS.GUILDS, FLAGS.GUILD_MESSAGES],
+	intents: [
+		"GUILDS",
+		"GUILD_MESSAGES",
+		"GUILD_EMOJIS_AND_STICKERS",
+		"GUILD_MESSAGE_REACTIONS",
+	],
 });
 export { ExtendedClient };
 export default client;
-
-
 
 // export interface ClientOptions {
 //   shards?: number | number[] | 'auto';
