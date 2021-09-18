@@ -56,9 +56,39 @@ class ExtendedClient extends Client {
 	}
 }
 
+const { FLAGS } = Intents;
+
 const client = new ExtendedClient({
 	partials: ["MESSAGE", "CHANNEL", "REACTION"],
-	intents: [Intents.FLAGS.GUILDS, Intents.FLAGS.GUILD_MESSAGES],
+	intents: [FLAGS.GUILDS, FLAGS.GUILD_MESSAGES],
 });
 export { ExtendedClient };
 export default client;
+
+
+
+// export interface ClientOptions {
+//   shards?: number | number[] | 'auto';
+//   shardCount?: number;
+//   makeCache?: CacheFactory;
+//   /** @deprecated Use `makeCache` with a `LimitedCollection` for `MessageManager` instead. */
+//   messageCacheLifetime?: number;
+//   /** @deprecated Use `makeCache` with a `LimitedCollection` for `MessageManager` instead. */
+//   messageSweepInterval?: number;
+//   allowedMentions?: MessageMentionOptions;
+//   invalidRequestWarningInterval?: number;
+//   partials?: PartialTypes[];
+//   restWsBridgeTimeout?: number;
+//   restTimeOffset?: number;
+//   restRequestTimeout?: number;
+//   restGlobalRateLimit?: number;
+//   restSweepInterval?: number;
+//   retryLimit?: number;
+//   failIfNotExists?: boolean;
+//   userAgentSuffix?: string[];
+//   presence?: PresenceData;
+//   intents: BitFieldResolvable<IntentsString, number>;
+//   ws?: WebSocketOptions;
+//   http?: HTTPOptions;
+//   rejectOnRateLimit?: string[] | ((data: RateLimitData) => boolean | Promise<boolean>);
+// }
