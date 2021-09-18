@@ -7,6 +7,7 @@ env.config({ path });
 const config: Config = {
 	token: process.env.TOKEN || "",
 	clientId: process.env.CLIENT_ID || "",
+	guildId: process.env.TEST_GUILD_ID || "",
 	prefix: "#",
 };
 

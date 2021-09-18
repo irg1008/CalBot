@@ -1,3 +1,4 @@
+import { SlashCommandBuilder } from "@discordjs/builders";
 import {
 	Message,
 	ClientEvents,
@@ -26,24 +27,31 @@ interface Event {
 	execute: EventExecute;
 }
 
-interface BaseCommand {
+interface Command {
 	name: string;
-	description?: string;
-}
-
-interface Command extends BaseCommand {
-	execute: CommandExecute;
+	description: string;
 	aliases?: string[];
+	execute: CommandExecute;
 }
 
-interface SlashCommand extends BaseCommand {
+interface SlashCommand {
+	data: Partial<SlashCommandBuilder>;
 	execute: SlashCommandExecute;
 }
 
 interface Config {
 	token: string;
 	clientId: string;
+	guildId: string;
 	prefix: string;
 }
 
-export { Event, Command, SlashCommand, Config };
+export {
+	Event,
+	Command,
+	SlashCommand,
+	Config,
+	SlashCommandExecute,
+	CommandExecute,
+	EventExecute,
+};

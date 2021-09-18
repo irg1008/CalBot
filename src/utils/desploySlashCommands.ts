@@ -2,22 +2,25 @@ import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 import { ExtendedClient } from "../client";
 
-const getClientCommands = (client: ExtendedClient) => {
+const getClientCommandsData = (client: ExtendedClient) => {
 	const slashCommands = Array.from(client.slashCommands.values());
-	return slashCommands;
+	const slashCommandsData = slashCommands.map((cmd) => cmd.data);
+	return slashCommandsData;
 };
 
 const deploycommands = async (client: ExtendedClient) => {
 	if (!client) throw new Error("Please provide a valid client");
 
-	const { token, clientId } = client.config;
+	const { token, clientId, guildId } = client.config;
 	const rest = new REST({ version: "9" }).setToken(token);
-	const commands = getClientCommands(client);
+	const commandsData = getClientCommandsData(client);
 
 	// Rgister commands.
 	try {
-		await rest.put(Routes.applicationCommands(clientId), { body: commands });
-		console.log("Successfully registered application commands.");
+		await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
+			body: commandsData,
+		});
+		console.log("Slash commmands desployed correctly");
 	} catch (error) {
 		console.error(error);
 	}

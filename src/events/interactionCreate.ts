@@ -1,11 +1,10 @@
 import { Event } from "../types/Discord.types";
-import { GuildMember, Interaction, DMChannel } from "discord.js";
+import { GuildMember, Interaction } from "discord.js";
 
 export const event: Event = {
 	name: "interactionCreate",
 	execute: async (client, interaction: Interaction) => {
-		// Don`t execute in DMs.
-		if (interaction.channel instanceof DMChannel) return;
+		if (!interaction.guild) return;
 
 		// Slash Command Handling
 		if (interaction.isCommand()) {
