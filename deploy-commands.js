@@ -1,22 +1,20 @@
-const { SlashCommandBuilder } = require("@discordjs/builders");
+const fs = require("fs");
 const { REST } = require("@discordjs/rest");
 const { Routes } = require("discord-api-types/v9");
-const { clientId, guildId, token } = require("./config.json");
+const { clientId, token } = require("./config.js");
 
-const commands = [
-	new SlashCommandBuilder()
-		.setName("ping")
-		.setDescription("Replies with pong!"),
-	new SlashCommandBuilder()
-		.setName("server")
-		.setDescription("Replies with server info!"),
-	new SlashCommandBuilder()
-		.setName("user")
-		.setDescription("Replies with user info!"),
-	new SlashCommandBuilder()
-		.setName("cacota")
-		.setDescription("A ver si funsiona esta cacota!"),
-].map((command) => command.toJSON());
+// Get commands files from commands folder.
+const commands = [];
+const commandFiles = fs
+	.readdirSync("./commands")
+	.filter((file) => file.endsWith(".js"));
+
+// Add the exported values of the commands
+// files to the commends arrayn.
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	commands.push(command.data.toJSON());
+}
 
 const rest = new REST({ version: "9" }).setToken(token);
 

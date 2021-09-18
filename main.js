@@ -1,50 +1,41 @@
-const { Client, Intents } = require("discord.js");
-const { token } = require("./config.json");
+const fs = require("fs");
+const { Client, Intents, Collection } = require("discord.js");
+const { token } = require("./config.js");
 
 const client = new Client({ intents: [Intents.FLAGS.GUILDS] });
+
+// Get commands files from commands folder.
+client.commands = new Collection();
+const commandFiles = fs
+	.readdirSync("./commands")
+	.filter((file) => file.endsWith(".js"));
+
+// Add the exported values of the commands
+// files to the client commands collection.
+for (const file of commandFiles) {
+	const command = require(`./commands/${file}`);
+	client.commands.set(command.data.name, command);
+}
 
 client.on("ready", () => {
 	console.log(`Logged in as ${client.user.tag}!`);
 });
 
-client.on("message", (msg) => {
-	if (msg.content === "ping") {
-		msg.reply("pong");
-	}
-});
-
 client.on("interactionCreate", async (interaction) => {
 	if (!interaction.isCommand()) return;
 
-	const { commandName } = interaction;
+	const command = client.commands.get(interaction.commandName);
 
-	switch (commandName) {
-		case "ping":
-			await interaction.reply("Pong!");
-			break;
+	if (!command) return;
 
-		case "server":
-			const guild = interaction.guild;
-			if (guild) {
-				await interaction.reply(
-					`Server name: ${guild.name}\nTotal members: ${interaction.guild.memberCount}`
-				);
-			}
-			break;
-
-		case "user":
-			await interaction.reply(
-				`Your tag: ${interaction.user.tag}\nYour id: ${interaction.user.id}`
-			);
-			break;
-
-				case "cacota":
-					await interaction.reply(
-						"💩 Cacota!!! 💩"
-					);
-
-		default:
-			break;
+	try {
+		await command.execute(interaction);
+	} catch (error) {
+		console.error(error);
+		await interaction.reply({
+			content: "There was an error while executing this command!",
+			ephemeral: true,
+		});
 	}
 });
 
