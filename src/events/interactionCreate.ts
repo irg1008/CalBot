@@ -1,19 +1,19 @@
 import { Event } from "../types/Discord.types";
-import { GuildMember, Interaction, Message } from "discord.js";
+import { GuildMember, Interaction, DMChannel } from "discord.js";
 
 export const event: Event = {
 	name: "interactionCreate",
 	execute: async (client, interaction: Interaction) => {
+		// Don`t execute in DMs.
+		if (interaction.channel instanceof DMChannel) return;
+
 		// Slash Command Handling
 		if (interaction.isCommand()) {
 			await interaction.deferReply({ ephemeral: false }).catch(() => {});
 
 			const commandName = interaction.commandName.toLowerCase();
 
-			const command =
-				client.slashCommands.get(commandName) ||
-				client.slashAliases.get(commandName);
-
+			const command = client.slashCommands.get(commandName);
 			if (!command)
 				return interaction.followUp({ content: "An error has occured " });
 

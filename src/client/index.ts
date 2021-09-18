@@ -3,7 +3,6 @@ import { readdirSync } from "fs";
 import path from "path";
 import { Command, SlashCommand, Event, Config } from "../types/Discord.types";
 import config from "../config";
-import { Intents } from "discord.js";
 
 class ExtendedClient extends Client {
 	public commands: Collection<string, Command> = new Collection();
@@ -55,8 +54,6 @@ class ExtendedClient extends Client {
 		});
 	}
 }
-
-const { FLAGS } = Intents;
 
 const client = new ExtendedClient({
 	intents: [
