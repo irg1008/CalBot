@@ -29,7 +29,7 @@ async function getCalendarEvents(
     /*
     Creo que puedes hacer:
     
-      const res = await axios.get(url, params);
+      const res = await axios.get(url, { params });
       
     Ya que json está por defecto.
     */
