@@ -17,10 +17,10 @@ const deploycommands = async (client: ExtendedClient) => {
 
 	// Rgister commands.
 	try {
-		await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
+		await rest.put(Routes.applicationCommands(clientId), {
 			body: commandsData,
 		});
-		console.log("Slash commmands desployed correctly");
+		console.log("Slash commands desployed correctly");
 	} catch (error) {
 		console.error(error);
 	}

@@ -3,20 +3,20 @@ import { SlashCommand, SlashCommandExecute } from "../../types/Discord.types";
 
 const echoExecute: SlashCommandExecute = async (_, interaction) => {
 	const messageToEcho = interaction.options.getString("message");
-	const user = interaction.options.getUser("target");
+	const target = interaction.options.getUser("user");
 
-	if (user) {
-		await user.send({
+	if (target) {
+		await target.send({
 			content: messageToEcho,
 		});
 		await interaction.followUp({
-			content: `Message sent to ${user.tag}`,
+			content: `${interaction.user} sent a message to ${target}`,
+		});
+	} else {
+		await interaction.followUp({
+			content: messageToEcho,
 		});
 	}
-
-	await interaction.followUp({
-		content: messageToEcho,
-	});
 };
 
 export const command: SlashCommand = {
