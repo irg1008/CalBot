@@ -8,6 +8,9 @@
 		"dev": "cross-env NODE_PATH=./src ts-node-dev --respawn --transpile-only --poll ./src/index.ts",
 		"start": "cross-env NODE_PATH=./dist node ./dist/index.js"
 	},
+	"engines": {
+		"node": "16.x"
+	},
 	"keywords": [],
 	"author": "",
 	"license": "ISC",
