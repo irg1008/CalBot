@@ -1,6 +1,7 @@
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
 import { ExtendedClient } from "client";
+import command from "lib/commands/normal/ping";
 
 const getClientCommandsData = (client: ExtendedClient) => {
 	const slashCommands = Array.from(client.slashCommands.values());
@@ -17,9 +18,17 @@ const deploycommands = async (client: ExtendedClient) => {
 
 	// Rgister commands.
 	try {
-		await rest.put(Routes.applicationCommands(clientId), {
-			body: commandsData,
-		});
+		// If guildId is set => Development on given guild id.
+		if (guildId) {
+			await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
+				body: commandsData,
+			});
+		} else {
+			await rest.put(Routes.applicationCommands(clientId), {
+				body: commandsData,
+			});
+		}
+
 		console.log("Slash commands desployed correctly");
 	} catch (error) {
 		console.error(error);
