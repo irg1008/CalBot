@@ -58,8 +58,11 @@ async function getCalendarEvents(
 	}
 }
 
-getCalendarEvents(
-	"AIzaSyB6Nvvdr7EJLNo-1-LVI0gE3mX7QJMv5HY",
-	"rcc5p5lpprm58409k39j6an06s%40group.calendar.google.com",
-	"[NEURONAL]"
-);
+const example = () =>
+	getCalendarEvents(
+		"AIzaSyB6Nvvdr7EJLNo-1-LVI0gE3mX7QJMv5HY",
+		"rcc5p5lpprm58409k39j6an06s%40group.calendar.google.com",
+		"[NEURONAL]"
+	);
+
+export { example };
