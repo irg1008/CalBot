@@ -4,7 +4,7 @@
 	"description": "UBU calendar",
 	"main": "src/index.ts",
 	"scripts": {
-		"build": "tsc && cp Procfile ./dist",
+		"build": "tsc ",
 		"dev": "cross-env NODE_PATH=./src ts-node-dev --respawn --transpile-only --poll ./src/index.ts",
 		"start": "cross-env NODE_PATH=./dist node ./dist/index.js"
 	},
