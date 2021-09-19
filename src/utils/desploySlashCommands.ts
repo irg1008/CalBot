@@ -29,7 +29,7 @@ const deploycommands = async (client: ExtendedClient) => {
 			});
 		}
 
-		console.log("Slash commands desployed correctly");
+		console.log("Slash commands deployed correctly");
 	} catch (error) {
 		console.error(error);
 	}
