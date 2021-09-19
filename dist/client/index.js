@@ -5,7 +5,6 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ExtendedClient = void 0;
 const discord_js_1 = require("discord.js");
-const path_1 = __importDefault(require("path"));
 const config_1 = __importDefault(require("config"));
 const commands_1 = require("lib/commands");
 const events_1 = __importDefault(require("lib/events"));
@@ -18,7 +17,6 @@ class ExtendedClient extends discord_js_1.Client {
     async init() {
         this.login(this.config.token);
         // Commands.
-        const commandPath = path_1.default.join(__dirname, "..", "commands/normal");
         commands_1.commands.forEach((command) => {
             this.commands.set(command.name, command);
             if (command?.aliases?.length !== 0) {

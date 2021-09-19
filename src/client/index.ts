@@ -1,6 +1,4 @@
 import { Client, Collection } from "discord.js";
-import { readdirSync } from "fs";
-import path from "path";
 import { Command, SlashCommand, Event, Config } from "types/Discord.types";
 import config from "config";
 import { commands, slashCommands } from "lib/commands";
@@ -17,7 +15,6 @@ class ExtendedClient extends Client {
 		this.login(this.config.token);
 
 		// Commands.
-		const commandPath = path.join(__dirname, "..", "commands/normal");
 		commands.forEach((command) => {
 			this.commands.set(command.name, command);
 
