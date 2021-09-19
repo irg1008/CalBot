@@ -1,4 +1,4 @@
-import { Event } from "../types/Discord.types";
+import { Event } from "types/Discord.types";
 import { GuildMember, Interaction } from "discord.js";
 
 export const event: Event = {

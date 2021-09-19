@@ -1,8 +1,9 @@
 import { Client, Collection } from "discord.js";
 import { readdirSync } from "fs";
 import path from "path";
-import { Command, SlashCommand, Event, Config } from "../types/Discord.types";
-import config from "../config";
+import { Command, SlashCommand, Event, Config } from "types/Discord.types";
+import config from "config";
+import slashCommands from "commands/slash";
 
 class ExtendedClient extends Client {
 	public commands: Collection<string, Command> = new Collection();
@@ -31,12 +32,7 @@ class ExtendedClient extends Client {
 		});
 
 		// Slash Commands.
-		const slashPath = path.join(__dirname, "..", "commands/slash");
-		readdirSync(slashPath).forEach((file) => {
-			const {
-				command,
-			}: { command: SlashCommand } = require(`${slashPath}/${file}`);
-
+		slashCommands.forEach((command) => {
 			this.slashCommands.set(command.data.name, command);
 		});
 

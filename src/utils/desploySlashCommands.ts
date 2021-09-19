@@ -1,6 +1,6 @@
 import { REST } from "@discordjs/rest";
 import { Routes } from "discord-api-types/v9";
-import { ExtendedClient } from "../client";
+import { ExtendedClient } from "client";
 
 const getClientCommandsData = (client: ExtendedClient) => {
 	const slashCommands = Array.from(client.slashCommands.values());

@@ -1,7 +1,7 @@
 import env from "dotenv";
-import { Config } from "../types/Discord.types";
+import { Config } from "types/Discord.types";
 
-const path = "src/config/.env";
+const path = ".env";
 env.config({ path });
 
 const config: Config = {

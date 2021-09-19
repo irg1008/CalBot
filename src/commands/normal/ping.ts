@@ -1,4 +1,4 @@
-import { Command } from "../../types/Discord.types";
+import { Command } from "types/Discord.types";
 
 export const command: Command = {
 	name: "ping",

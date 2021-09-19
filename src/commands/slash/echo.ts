@@ -1,5 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { SlashCommand, SlashCommandExecute } from "../../types/Discord.types";
+import { SlashCommand, SlashCommandExecute } from "types/Discord.types";
 
 const echoExecute: SlashCommandExecute = async (_, interaction) => {
 	const messageToEcho = interaction.options.getString("message");
@@ -19,7 +19,7 @@ const echoExecute: SlashCommandExecute = async (_, interaction) => {
 	}
 };
 
-export const command: SlashCommand = {
+const command: SlashCommand = {
 	data: new SlashCommandBuilder()
 		.setName("echo")
 		.setDescription("Echo your message")
@@ -37,3 +37,5 @@ export const command: SlashCommand = {
 		),
 	execute: echoExecute,
 };
+
+export default command;

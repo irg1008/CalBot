@@ -5,7 +5,7 @@ import {
 	CommandInteraction,
 	ContextMenuInteraction,
 } from "discord.js";
-import { ExtendedClient } from "../client";
+import { ExtendedClient } from "client";
 
 type EventExecute = (client: ExtendedClient, ...args: any[]) => void;
 

@@ -1,7 +1,7 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import { SlashCommand } from "../../types/Discord.types";
+import { SlashCommand } from "types/Discord.types";
 
-export const command: SlashCommand = {
+const command: SlashCommand = {
 	data: new SlashCommandBuilder()
 		.setName("cacota")
 		.setDescription("Replies with cacota!"),
@@ -9,3 +9,5 @@ export const command: SlashCommand = {
 		await interaction.followUp({ content: `Una 💩 para ${interaction.user}!` });
 	},
 };
+
+export default command;

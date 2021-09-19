@@ -1,4 +1,4 @@
-import { Event, Command } from "../types/Discord.types";
+import { Event, Command } from "types/Discord.types";
 import { Message } from "discord.js";
 
 export const event: Event = {

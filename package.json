@@ -4,7 +4,10 @@
 	"description": "UBU calendar",
 	"main": "src/index.ts",
 	"scripts": {
-		"start": "ts-node-dev --respawn --transpile-only --poll ./src/index.ts"
+		"build": "tsc",
+		"dev": "cross-env NODE_PATH=./src ts-node-dev --respawn --transpile-only --poll ./src/index.ts",
+		"start": "cross-env NODE_PATH=./dist node ./dist/index.js",
+		"prod": "npm tun build && nom run start"
 	},
 	"keywords": [],
 	"author": "",
@@ -14,6 +17,7 @@
 		"@discordjs/builders": "^0.6.0",
 		"@discordjs/rest": "^0.1.0-canary.0",
 		"axios": "^0.21.4",
+		"cross-env": "^7.0.3",
 		"discord-api-types": "^0.23.1",
 		"discord.js": "^13.1.0",
 		"dotenv": "^10.0.0",
