@@ -1,7 +1,7 @@
 import { Event } from "types/Discord.types";
 import { GuildMember, Interaction } from "discord.js";
 
-export const event: Event = {
+const event: Event = {
 	name: "interactionCreate",
 	execute: async (client, interaction: Interaction) => {
 		if (!interaction.guild) return;
@@ -42,3 +42,5 @@ export const event: Event = {
 		}
 	},
 };
+
+export default event;

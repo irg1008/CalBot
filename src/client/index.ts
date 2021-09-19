@@ -3,7 +3,8 @@ import { readdirSync } from "fs";
 import path from "path";
 import { Command, SlashCommand, Event, Config } from "types/Discord.types";
 import config from "config";
-import slashCommands from "commands/slash";
+import { commands, slashCommands } from "lib/commands";
+import events from "lib/events";
 
 class ExtendedClient extends Client {
 	public commands: Collection<string, Command> = new Collection();
@@ -17,11 +18,7 @@ class ExtendedClient extends Client {
 
 		// Commands.
 		const commandPath = path.join(__dirname, "..", "commands/normal");
-		readdirSync(commandPath).forEach((file) => {
-			const {
-				command,
-			}: { command: Command } = require(`${commandPath}/${file}`);
-
+		commands.forEach((command) => {
 			this.commands.set(command.name, command);
 
 			if (command?.aliases?.length !== 0) {
@@ -37,9 +34,7 @@ class ExtendedClient extends Client {
 		});
 
 		// Events.
-		const eventPath = path.join(__dirname, "..", "events");
-		readdirSync(eventPath).forEach(async (file) => {
-			const { event }: { event: Event } = await import(`${eventPath}/${file}`);
+		events.forEach(async (event) => {
 			this.events.set(event.name, event);
 
 			if (event.once) {

@@ -1,6 +1,6 @@
 import { Command } from "types/Discord.types";
 
-export const command: Command = {
+const command: Command = {
 	name: "user",
 	description: "Replies with user info!",
 	aliases: ["u"],
@@ -14,3 +14,5 @@ export const command: Command = {
 		}
 	},
 };
+
+export default command;

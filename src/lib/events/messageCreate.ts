@@ -1,7 +1,7 @@
 import { Event, Command } from "types/Discord.types";
 import { Message } from "discord.js";
 
-export const event: Event = {
+const event: Event = {
 	name: "messageCreate",
 	execute: (client, message: Message) => {
 		const isNotCommand =
@@ -23,3 +23,5 @@ export const event: Event = {
 		if (command) (command as Command).execute(client, message, args);
 	},
 };
+
+export default event;

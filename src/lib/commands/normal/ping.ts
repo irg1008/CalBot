@@ -1,6 +1,6 @@
 import { Command } from "types/Discord.types";
 
-export const command: Command = {
+const command: Command = {
 	name: "ping",
 	description: "Replies with Pong!",
 	aliases: ["p"],
@@ -8,3 +8,5 @@ export const command: Command = {
 		await message.channel.send(`${client.ws.ping} ping!`);
 	},
 };
+
+export default command;
