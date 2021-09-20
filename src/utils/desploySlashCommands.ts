@@ -8,44 +8,30 @@ const getClientCommandsData = (client: ExtendedClient) => {
 	return slashCommandsData;
 };
 
-const deploycommands = async (client: ExtendedClient) => {
+const deploycommands = async (client: ExtendedClient, guildId?: string) => {
 	if (!client) throw new Error("Please provide a valid client");
 
-	const { token, clientId, guildId } = client.config;
+	const { token, clientId } = client.config;
 	const rest = new REST({ version: "9" }).setToken(token);
 	const commandsData = getClientCommandsData(client);
 
-	// Register commands on all guilds. This is not okay.
+	// Rgister commands.
 	try {
-		client.guilds.cache.forEach(async (guild) => {
-			const guildId = guild.id;
+		// If guildId is set => Development on given guild id.
+		if (guildId) {
 			await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
 				body: commandsData,
 			});
-		});
+		} else {
+			await rest.put(Routes.applicationCommands(clientId), {
+				body: commandsData,
+			});
+		}
 
 		console.log("Slash commands deployed correctly");
 	} catch (error) {
 		console.error(error);
 	}
-
-	// // Rgister commands.
-	// try {
-	// 	// If guildId is set => Development on given guild id.
-	// 	if (guildId) {
-	// 		await rest.put(Routes.applicationGuildCommands(clientId, guildId), {
-	// 			body: commandsData,
-	// 		});
-	// 	} else {
-	// 		await rest.put(Routes.applicationCommands(clientId), {
-	// 			body: commandsData,
-	// 		});
-	// 	}
-
-	// 	console.log("Slash commands deployed correctly");
-	// } catch (error) {
-	// 	console.error(error);
-	// }
 };
 
 export default deploycommands;

@@ -42,7 +42,7 @@ interface SlashCommand {
 interface Config {
 	token: string;
 	clientId: string;
-	guildId: string;
+	testGuildId: string;
 	prefix: string;
 }
 
