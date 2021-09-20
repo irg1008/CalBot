@@ -8,6 +8,11 @@ async function getCalendarEvents(
 	minDate?: Date,
 	maxDate?: Date
 ) {
+	/*
+		Nota: En js "" es falsy.
+			if (!key) throw "Invalid Api Key";
+			if (!calId) throw "Invalid Calendar Id";
+	*/
 	if (!key || key.length == 0) {
 		throw "Invalid Api Key";
 	}
@@ -26,6 +31,12 @@ async function getCalendarEvents(
 	};
 
 	try {
+		/*
+			Nota del tonto de Iván: Puedes pasarle el tipo de la respuesta entre <type>.
+				const res = await axios.get<CalendarEventsRes>(url, { params });
+				const { data } = res;
+ 		*/
+
 		const res = await axios.get(url, {
 			params,
 		});
