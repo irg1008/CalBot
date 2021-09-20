@@ -1,0 +1,32 @@
+{
+	"name": "ubu-cal",
+	"version": "1.0.0",
+	"description": "UBU calendar",
+	"main": "src/index.ts",
+	"scripts": {
+		"build": "tsc",
+		"dev": "cross-env NODE_PATH=./src ts-node-dev --respawn --transpile-only --poll ./src/index.ts",
+		"start": "cross-env NODE_PATH=./dist node ./dist/index.js"
+	},
+	"engines": {
+		"node": "16.x"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"devDependencies": {
+		"ts-node": "^10.2.1",
+		"ts-node-dev": "^1.1.8"
+	},
+	"dependencies": {
+		"@discordjs/builders": "^0.6.0",
+		"@discordjs/rest": "^0.1.0-canary.0",
+		"axios": "^0.21.4",
+		"cross-env": "^7.0.3",
+		"discord-api-types": "^0.23.1",
+		"discord.js": "^13.1.0",
+		"dotenv": "^10.0.0",
+		"tsc": "^2.0.3",
+		"typescript": "^4.4.3"
+	}
+}
