@@ -4,7 +4,7 @@ import { GuildMember, Interaction } from "discord.js";
 const event: Event = {
 	name: "interactionCreate",
 	execute: async (client, interaction: Interaction) => {
-		if (interaction.channel.type === "DM") return;
+		if (!interaction.guild) return;
 
 		// Slash Command Handling
 		if (interaction.isCommand()) {
