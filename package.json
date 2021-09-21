@@ -1,7 +1,7 @@
 {
-	"name": "ubu-cal",
+	"name": "cal-bot",
 	"version": "1.0.0",
-	"description": "UBU calendar",
+	"description": "Calendar Bot",
 	"main": "src/index.ts",
 	"scripts": {
 		"build": "tsc",
