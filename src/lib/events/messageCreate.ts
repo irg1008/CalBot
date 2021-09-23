@@ -1,15 +1,13 @@
 import { Event, Command } from "types/Discord.types";
 import { Message } from "discord.js";
+import { getGuildPrefix } from "db/api";
 
 const event: Event = {
 	name: "messageCreate",
 	execute: async (client, message: Message) => {
-		// Get guild prefix from db.
-		const { data: guildConfig } = await client.db
-			.from<{ prefix: string; guildId: string }>("GuildConfig")
-			.select("prefix")
-			.filter("guildId", "eq", message.guildId);
-		const guildPrefix = guildConfig[0].prefix;
+		// Get guild prefix from db or fallback to default.
+		const guildPrefix =
+			(await getGuildPrefix(message.guildId)) || client.config.prefix;
 
 		const isNotCommand =
 			message.author.bot ||

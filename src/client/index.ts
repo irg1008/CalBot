@@ -1,10 +1,8 @@
 import { Command, SlashCommand, Event, Config } from "types/Discord.types";
-import { SupabaseClient } from "@supabase/supabase-js";
 import { Client, Collection } from "discord.js";
 import { commands, slashCommands } from "lib/commands";
 import { discordConfig } from "config";
 import events from "lib/events";
-import dbClient from "db";
 
 class ExtendedClient extends Client {
 	public commands: Collection<string, Command> = new Collection();
@@ -12,7 +10,6 @@ class ExtendedClient extends Client {
 	public events: Collection<string, Event> = new Collection();
 	public config: Config = discordConfig;
 	public aliases: Collection<string, Command> = new Collection();
-	public db: SupabaseClient = dbClient;
 
 	public async init() {
 		this.login(this.config.token);

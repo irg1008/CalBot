@@ -1,17 +1,12 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
+import { updateCalendarConfig } from "db/api";
 import { SlashCommand, SlashCommandExecute } from "types/Discord.types";
 
-const setupExecute: SlashCommandExecute = async (client, interaction) => {
-	const guildId = interaction.guildId;
+const setupExecute: SlashCommandExecute = async (_, { guildId, options }) => {
+	const apiKey = options.getString("key");
+	const calId = options.getString("id");
 
-	const apiKey = interaction.options.getString("key");
-	const calId = interaction.options.getString("id");
-
-	const { error } = await client.db
-		.from("GuildConfig")
-		.upsert([{ guildId, apiKey, calId }]);
-
-	error && console.error(error);
+	await updateCalendarConfig(guildId, { apiKey, calId });
 };
 
 const command: SlashCommand = {

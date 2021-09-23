@@ -1,11 +1,10 @@
-import { Config } from "types/Supabase.types";
+import { SupabaseConfig } from "types/Supabase.types";
 import env from "dotenv";
 
 const path = ".env";
 env.config({ path });
 
-
-const config: Config = {
+const config: SupabaseConfig = {
 	apiKey: process.env.SUPABASE_API_KEY,
 	endpoint: process.env.SUPABASE_ENDPOINT,
 };
