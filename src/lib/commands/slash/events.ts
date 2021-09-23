@@ -45,7 +45,7 @@ const eventsExecute: SlashCommandExecute = async (_, interaction) => {
 		}
 	}
 
-	const eventNames = events.map((event) => event.summary);
+	const eventNames = events.map((event) => event.summary).slice(0, 20);
 
 	await interaction.followUp({
 		content: `Successfuly retrieved events. N: ${
