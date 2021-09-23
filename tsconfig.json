@@ -20,7 +20,7 @@
   },
   "include": [
     "src"
-  ],
+, "temp/setup_bu.ts"  ],
   "exclude": [
     "node_modules"
   ]
