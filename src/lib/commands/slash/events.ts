@@ -36,7 +36,7 @@ const eventsExecute: SlashCommandExecute = async (
 		} else {
 			channelTags.forEach(async (tag) => {
 				const { data: tagEvents, error } = await calendar.getEvents({ q: tag });
-				console.log(error);
+				console.log(calendar);
 				if (error) return errorHappened();
 				events.push(tagEvents);
 			});
