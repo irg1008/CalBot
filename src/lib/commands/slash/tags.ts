@@ -13,7 +13,7 @@ const setupExecute: SlashCommandExecute = async (_, interaction) => {
 	const { guildId, options } = interaction;
 	const subcommand = options.getSubcommand() as "add" | "remove" | "list";
 
-	const tag = options.getString("tag");
+	const tag = options.getString("tag").toString();
 	const channel = options.getChannel("channel") || interaction.channel;
 	const channelId = channel.id;
 
