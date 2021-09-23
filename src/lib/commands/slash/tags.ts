@@ -13,7 +13,7 @@ const setupExecute: SlashCommandExecute = async (_, interaction) => {
 	const { guildId, options } = interaction;
 	const subcommand = options.getSubcommand() as "add" | "remove" | "list";
 
-	const tag = options.getString("tag").toString();
+	const tag = options.getString("tag")?.toString();
 	const channel = options.getChannel("channel") || interaction.channel;
 	const channelId = channel.id;
 
@@ -26,11 +26,11 @@ const setupExecute: SlashCommandExecute = async (_, interaction) => {
 			});
 
 			if (added) {
-				interaction.followUp({
+				await interaction.followUp({
 					content: `Tag ${tag} has been added to the channel.`,
 				});
 			} else {
-				interaction.followUp({
+				await interaction.followUp({
 					content: "We couldn't add the tag",
 				});
 			}
@@ -46,11 +46,11 @@ const setupExecute: SlashCommandExecute = async (_, interaction) => {
 			});
 
 			if (removed) {
-				interaction.followUp({
+				await interaction.followUp({
 					content: `Tag ${tag} has been removed from the channel.`,
 				});
 			} else {
-				interaction.followUp({
+				await interaction.followUp({
 					content: "We couldn't remove the tag",
 				});
 			}
@@ -62,9 +62,9 @@ const setupExecute: SlashCommandExecute = async (_, interaction) => {
 			const tags = await getTagsFromChannel({ guildId, channelId });
 
 			if (tags && tags.length > 0) {
-				interaction.followUp({ content: tags.join(", ") });
+				await interaction.followUp({ content: tags.join(", ") });
 			} else {
-				interaction.followUp({
+				await interaction.followUp({
 					content: "There are no tags linked with the channel. Use /tags add",
 				});
 			}

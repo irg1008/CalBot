@@ -14,7 +14,7 @@ const event: Event = {
 
 			const command = client.slashCommands.get(commandName);
 			if (!command)
-				return interaction.followUp({ content: "An error has occured " });
+				return await interaction.followUp({ content: "An error has occured " });
 
 			const args: string[] = [];
 
