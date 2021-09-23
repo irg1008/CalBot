@@ -1,4 +1,7 @@
-import { SlashCommandBuilder } from "@discordjs/builders";
+import {
+	SlashCommandBuilder,
+	SlashCommandSubcommandBuilder,
+} from "@discordjs/builders";
 import {
 	Message,
 	ClientEvents,

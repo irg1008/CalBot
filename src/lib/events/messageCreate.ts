@@ -3,11 +3,18 @@ import { Message } from "discord.js";
 
 const event: Event = {
 	name: "messageCreate",
-	execute: (client, message: Message) => {
+	execute: async (client, message: Message) => {
+		// Get guild prefix from db.
+		const { data: guildConfig } = await client.db
+			.from<{ prefix: string; guildId: string }>("GuildConfig")
+			.select("prefix")
+			.filter("guildId", "eq", message.guildId);
+		const guildPrefix = guildConfig[0].prefix;
+
 		const isNotCommand =
 			message.author.bot ||
 			!message.guild ||
-			!message.content.startsWith(client.config.prefix);
+			!message.content.startsWith(guildPrefix);
 
 		if (isNotCommand) return;
 
