@@ -17,7 +17,7 @@ const setupExecute: SlashCommandExecute = async (client, interaction) => {
 const command: SlashCommand = {
 	data: new SlashCommandBuilder()
 		.setName("setup")
-		.setDescription("Sets the bot calendar key or/id")
+		.setDescription("Sets the bot calendar key and id")
 		.addStringOption((option) =>
 			option
 				.setName("key")
