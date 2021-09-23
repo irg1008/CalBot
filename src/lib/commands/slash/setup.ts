@@ -1,9 +1,8 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
-import calendar from "calendar/client";
 import { updateCalendarConfig } from "db/api";
 import { SlashCommand, SlashCommandExecute } from "types/Discord.types";
 
-const setupExecute: SlashCommandExecute = async (_, interaction) => {
+const setupExecute: SlashCommandExecute = async ({ calendar }, interaction) => {
 	const { guildId, options } = interaction;
 
 	const apiKey = options.getString("key");
