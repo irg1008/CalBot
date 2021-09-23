@@ -2,9 +2,21 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 import { updatePrefix } from "db/api";
 import { SlashCommand, SlashCommandExecute } from "types/Discord.types";
 
-const prefixExecute: SlashCommandExecute = async (_, { guildId, options }) => {
+const prefixExecute: SlashCommandExecute = async (_, interaction) => {
+	const { guildId, options } = interaction;
+
 	const newPrefix = options.getString("new");
-	await updatePrefix(guildId, newPrefix);
+	const updatedCorrectly = await updatePrefix(guildId, newPrefix);
+
+	if (updatedCorrectly) {
+		await interaction.followUp({
+			content: `Command prefix has been updated to ${newPrefix}`,
+		});
+	} else {
+		await interaction.followUp({
+			content: "We could't update the prefix. Try again",
+		});
+	}
 };
 
 const command: SlashCommand = {
