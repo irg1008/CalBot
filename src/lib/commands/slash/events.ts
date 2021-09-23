@@ -50,8 +50,6 @@ const eventsExecute: SlashCommandExecute = async (_, interaction) => {
 			events.length
 		}\n${JSON.stringify(events, null, 2)}`,
 	});
-
-	console.log(events.length);
 };
 
 const command: SlashCommand = {
