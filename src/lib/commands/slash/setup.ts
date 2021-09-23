@@ -1,4 +1,5 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
+import calendar from "calendar/client";
 import { updateCalendarConfig } from "db/api";
 import { SlashCommand, SlashCommandExecute } from "types/Discord.types";
 
@@ -17,6 +18,8 @@ const setupExecute: SlashCommandExecute = async (_, interaction) => {
 		await interaction.followUp({
 			content: `We have changed calendar API key and id`,
 		});
+		// Change the config on the calendar object.
+		calendar.updateConfig({ apiKey, calId });
 	} else {
 		await interaction.followUp({
 			content: "We could't change the calendar API key and id. Try again",

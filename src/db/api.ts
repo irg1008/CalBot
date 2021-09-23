@@ -31,6 +31,17 @@ const updateCalendarConfig = async (
 	return !error;
 };
 
+const getCalendarConfig = async (guildId: string): Promise<CalendarConfig> => {
+	const { data, error } = await from<GuildConfig>("GuildConfig")
+		.select()
+		.filter("guildId", "eq", guildId);
+
+	if (error) return null;
+
+	const { calId, apiKey } = data[0];
+	return { calId, apiKey };
+};
+
 const updatePrefix = async (guildId: string, newPrefix: string) => {
 	const { error } = await from<GuildConfig>("GuildConfig").upsert([
 		{ guildId, prefix: newPrefix },
@@ -107,4 +118,5 @@ export {
 	linkTagsToChannel,
 	getTagsFromChannel,
 	removeTagsFromChannel,
+	getCalendarConfig,
 };
