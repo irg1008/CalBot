@@ -81,6 +81,10 @@ const linkTagsToChannel = async ({
 	// Add to previous tags.
 	const prevTags = await getTagsFromChannel({ guildId, channelId });
 	newTags.push(...prevTags);
+	newTags = [...new Set(newTags)]; // Remove duplicates.
+
+	// If same tags => Do not update.
+	if (prevTags.length === newTags.length) return false;
 
 	const { error } = await from<GuildTags>("GuildTags").upsert([
 		{ guildId, channelId, tags: newTags },
@@ -98,14 +102,15 @@ const removeTagsFromChannel = async ({
 	const prevTags = await getTagsFromChannel({ guildId, channelId });
 	newTags = prevTags.filter((prevTag) => !newTags.includes(prevTag));
 
-	// If same length => Not deleted.
+	// If same tags => Do not delete.
 	if (prevTags.length === newTags.length) return false;
 
-	const { error } = await from<GuildTags>("GuildTags").update({
-		guildId,
-		channelId,
-		tags: newTags,
-	});
+	const { error } = await from<GuildTags>("GuildTags")
+		.update({
+			tags: newTags,
+		})
+		.filter("guildId", "eq", guildId)
+		.filter("channelId", "eq", channelId);
 
 	return !error;
 };
