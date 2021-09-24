@@ -4,6 +4,7 @@ import setupCommand from "./setup";
 import prefixCommand from "./prefix";
 import tagsCommand from "./tags";
 import eventsCommand from "./events";
+import loopCommand from "./loop";
 export default [
 	cacotaCommand,
 	echoCommand,
@@ -11,4 +12,5 @@ export default [
 	prefixCommand,
 	tagsCommand,
 	eventsCommand,
+	//loopCommand,
 ];
