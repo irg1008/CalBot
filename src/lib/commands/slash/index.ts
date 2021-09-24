@@ -6,11 +6,11 @@ import tagsCommand from "./tags";
 import eventsCommand from "./events";
 import loopCommand from "./loop";
 export default [
-	cacotaCommand,
-	echoCommand,
-	setupCommand,
-	prefixCommand,
-	tagsCommand,
-	eventsCommand,
-	//loopCommand,
+  cacotaCommand,
+  echoCommand,
+  setupCommand,
+  prefixCommand,
+  tagsCommand,
+  eventsCommand,
+  loopCommand,
 ];

@@ -3,41 +3,85 @@ import { SlashCommand, SlashCommandExecute } from "types/Discord.types";
 
 //
 import { CronJob } from "cron";
-import { Timezone } from "google-calendar-node-api/dist/types/Timezone.types";
+
+import moment from "moment";
+let job: CronJob;
 
 const loopExecute: SlashCommandExecute = async (_, interaction) => {
-	const msg = interaction.options.getString("command");
+  const subcommand = interaction.options.getSubcommand() as "start" | "stop";
 
-	const timeZone: Timezone = "Europe/Madrid";
+  switch (subcommand) {
+    case "start": {
+      if (job?.running) {
+        job.stop();
+      }
+      const time = interaction.options.getString("time");
 
-	const cronString = "* * * * * *";
+      const isValid = moment(time, ["HH:mm"], true).isValid();
 
-	let job = new CronJob(
-		cronString,
-		async () => {
-			await interaction.followUp({
-				content: msg,
-			});
-		},
-		null,
-		null,
-		timeZone
-	);
+      if (!isValid) {
+        await interaction.followUp({
+          content: `Invalid Time (${time})`,
+        });
+        return;
+      }
 
-	job.start();
+      const [h, m] = time.split(":");
+      const cronString = `${m} ${h} * * *`;
+
+      job = new CronJob(
+        cronString,
+        async () => {
+          await interaction.followUp({
+            content: `⏰ HE HE`,
+          });
+        },
+        null,
+        true
+      );
+      await interaction.followUp({
+        content: `⏰ The bot will notify daily at ${time}`,
+      });
+      break;
+    }
+    case "stop": {
+      if (job?.running) {
+        job.stop();
+
+        await interaction.followUp({
+          content: "⏰ Loop Stopped!",
+        });
+      } else {
+        await interaction.followUp({
+          content: "No loop scheduled!",
+        });
+      }
+      break;
+    }
+    default: {
+      console.error("Incorrect subcommand");
+    }
+  }
 };
 
 const command: SlashCommand = {
-	data: new SlashCommandBuilder()
-		.setName("loop")
-		.setDescription("Loops a command every x seconds")
-		.addStringOption((option) =>
-			option
-				.setName("command")
-				.setDescription("Command you want to loop every x seconds")
-				.setRequired(true)
-		),
-	execute: loopExecute,
+  data: new SlashCommandBuilder()
+    .setName("loop")
+    .setDescription("Sends that day calendar events to every channel"),
+  execute: loopExecute,
 };
+
+command.data
+  .addSubcommand((subcommand) =>
+    subcommand
+      .setName("start")
+      .setDescription("Starts the daily remainder")
+      .addStringOption((option) =>
+        option.setName("time").setDescription("Format HH:MM").setRequired(true)
+      )
+  )
+  .addSubcommand((subcommand) =>
+    subcommand.setName("stop").setDescription("Stops the daily remainder")
+  );
 
 export default command;
