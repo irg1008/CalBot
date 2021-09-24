@@ -1,87 +1,84 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { SlashCommand, SlashCommandExecute } from "types/Discord.types";
-
-//
 import { CronJob } from "cron";
-
 import moment from "moment";
+
 let job: CronJob;
 
 const loopExecute: SlashCommandExecute = async (_, interaction) => {
-  const subcommand = interaction.options.getSubcommand() as "start" | "stop";
+	const subcommand = interaction.options.getSubcommand() as "start" | "stop";
+	const isJobRunning = job?.running;
 
-  switch (subcommand) {
-    case "start": {
-      if (job?.running) {
-        job.stop();
-      }
-      const time = interaction.options.getString("time");
+	switch (subcommand) {
+		case "start": {
+			if (isJobRunning) job.stop();
 
-      const isValid = moment(time, ["HH:mm"], true).isValid();
+			const time = interaction.options.getString("time");
+			const isValid = moment(time, ["HH:mm"], true).isValid();
 
-      if (!isValid) {
-        await interaction.followUp({
-          content: `Invalid Time (${time})`,
-        });
-        return;
-      }
+			if (isValid) {
+				const [h, m] = time.split(":");
+				const cronString = `${m} ${h} * * *`;
 
-      const [h, m] = time.split(":");
-      const cronString = `${m} ${h} * * *`;
+				job = new CronJob(
+					cronString,
+					async () => {
+						await interaction.followUp({
+							content: `⏰ HE HE`,
+						});
+					},
+					null,
+					true
+				);
+				await interaction.followUp({
+					content: `⏰ The bot will notify daily at ${time}`,
+				});
+			}
 
-      job = new CronJob(
-        cronString,
-        async () => {
-          await interaction.followUp({
-            content: `⏰ HE HE`,
-          });
-        },
-        null,
-        true
-      );
-      await interaction.followUp({
-        content: `⏰ The bot will notify daily at ${time}`,
-      });
-      break;
-    }
-    case "stop": {
-      if (job?.running) {
-        job.stop();
+			await interaction.followUp({
+				content: `Invalid Time (${time})`,
+			});
 
-        await interaction.followUp({
-          content: "⏰ Loop Stopped!",
-        });
-      } else {
-        await interaction.followUp({
-          content: "No loop scheduled!",
-        });
-      }
-      break;
-    }
-    default: {
-      console.error("Incorrect subcommand");
-    }
-  }
+			break;
+		}
+		case "stop": {
+			if (isJobRunning) {
+				job.stop();
+
+				await interaction.followUp({
+					content: "⏰ Loop Stopped!",
+				});
+			} else {
+				await interaction.followUp({
+					content: "No loop scheduled!",
+				});
+			}
+			break;
+		}
+		default:
+			break;
+	}
 };
 
 const command: SlashCommand = {
-  data: new SlashCommandBuilder()
-    .setName("loop")
-    .setDescription("Sends that day calendar events to every channel"),
-  execute: loopExecute,
+	data: new SlashCommandBuilder()
+		.setName("loop")
+		.setDescription("Sends that day calendar events to every channel"),
+	execute: loopExecute,
 };
 
+// Subcommands.
 command.data
-  .addSubcommand((subcommand) =>
-    subcommand
-      .setName("start")
-      .setDescription("Starts the daily remainder")
-      .addStringOption((option) =>
-        option.setName("time").setDescription("Format HH:MM").setRequired(true)
-      )
-  )
-  .addSubcommand((subcommand) =>
-    subcommand.setName("stop").setDescription("Stops the daily remainder")
-  );
+	.addSubcommand((subcommand) =>
+		subcommand
+			.setName("start")
+			.setDescription("Starts the daily remainder")
+			.addStringOption((option) =>
+				option.setName("time").setDescription("Format HH:MM").setRequired(true)
+			)
+	)
+	.addSubcommand((subcommand) =>
+		subcommand.setName("stop").setDescription("Stops the daily remainder")
+	);
 
 export default command;
