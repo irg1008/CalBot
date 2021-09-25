@@ -21,12 +21,16 @@ const loopExecute: SlashCommandExecute = async (_, interaction) => {
 				const [h, m] = time.split(":");
 				const cronString = `${m} ${h} * * *`;
 
-				job = cron.schedule(cronString, async () => {
-					await interaction.followUp({
-						content: "⏰ Daily events incoming!!",
-					});
-					await eventCommand.execute(_, interaction);
-				});
+				job = cron.schedule(
+					cronString,
+					async () => {
+						await interaction.followUp({
+							content: "⏰ Daily events incoming!!",
+						});
+						await eventCommand.execute(_, interaction);
+					},
+					{ timezone: "Europe/London", scheduled: true }
+				);
 
 				await interaction.followUp({
 					content: `⏰ The bot will notify daily at ${time}`,
