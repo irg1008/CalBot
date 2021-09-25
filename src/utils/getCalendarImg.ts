@@ -81,64 +81,68 @@ const getCalendarImgWithEvents = async (
 	const weeks = stripInWeeks(calWithEvents);
 
 	const style = `
-  <style>
-    @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap');
 
-    body {
-      height: ${weeks.length === 5 ? "380" : "440"}px;
-      width: 400px;
-    }
+      body {
+        height: ${weeks.length === 5 ? "494" : "562"}px;
+        width: 500px;
+      }
 
-    th,
-    td {
-      width: 40px;
-      height: 40px;
-      line-height: 40px;
-      border-radius: 5rem;
-      margin: 5px;
-    }
+      th,
+      td {
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        border-radius: 5rem;
+        margin: 8px;
+      }
+      
+      .day {
+        background-color: #2e2e2e;
+        text-align: center;
+      }
 
-    .day {
-      background-color: #2e2e2e;
-      text-align: center;
-    }
+      .empty {
+        background-color: #575757;
+      }
 
-    .empty {
-      background-color: #575757;
-    }
+      .event {
+        background-color: #5A55F8;
+        font-weight: 400;
+      }
 
-    .event {
-      color: #1a1a1a;
-      background-color: #1AA9E8;
-    }
+      table,
+      caption {
+        color: #f5f5f5;
+        background-color: #1a1a1a;
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+        border-radius: 0 0 20px 20px;
+      }
 
-    table,
-    caption {
-      color: #f5f5f5;
-      background-color: #1a1a1a;
-      font-family: "Roboto", sans-serif;
-    }
+      table {
+        padding: 10px;
+        border-radious: 10px;
+      }
 
-    caption {
-      height: 50px;
-      line-height: 50px;
-      width: 100% !important;
-      trasnform: uppercase;
-      font-size: 2rem;
-    }
+      caption {
+        height: 30px;
+        line-height: 30px;
+        width: 100% !important;
+        font-size: 2rem;
+        padding-top: 30px;
+        border-radius: 20px 20px 0 0;
+      }
 
-    table {
-      width: 100%;
-      height: 100%;
-    }
 
-    tr {
-      display: flex;
-      justify-content: space-around;
-      align-items: center;
-    }
-  </style>  
-`;
+      tr {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+    </style> 
+  `;
 
 	const table = `
     <table>
