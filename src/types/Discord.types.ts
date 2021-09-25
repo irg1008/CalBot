@@ -16,13 +16,13 @@ type CommandExecute = (
 	client: ExtendedClient,
 	message: Message,
 	args?: string[]
-) => void;
+) => Promise<void>;
 
 type SlashCommandExecute = (
 	client: ExtendedClient,
 	interaction: CommandInteraction | ContextMenuInteraction,
 	args?: string[]
-) => void;
+) => Promise<void>;
 
 interface Event {
 	name: keyof ClientEvents;

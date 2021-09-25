@@ -2,6 +2,7 @@ import { SlashCommandBuilder } from "@discordjs/builders";
 import { SlashCommand, SlashCommandExecute } from "types/Discord.types";
 import { CronJob } from "cron";
 import moment from "moment";
+import eventCommand from "./events";
 
 let job: CronJob;
 
@@ -24,8 +25,9 @@ const loopExecute: SlashCommandExecute = async (_, interaction) => {
 					cronString,
 					async () => {
 						await interaction.followUp({
-							content: `⏰ HE HE`,
+							content: `⏰ Daily ${time} events notifications incoming!!`,
 						});
+						await eventCommand.execute(_, interaction);
 					},
 					null,
 					true
