@@ -15,7 +15,7 @@ const loopExecute: SlashCommandExecute = async (_, interaction) => {
 			if (isJobRunning) job.stop();
 
 			const time = interaction.options.getString("time");
-			const isValid = moment(time, ["HH:mm", "HH:mm a"], true).isValid();
+			const isValid = moment(time, ["HH:mm"], true).isValid();
 
 			if (isValid) {
 				const [h, m] = time.split(":");
