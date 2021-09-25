@@ -23,7 +23,6 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 
 	const fields: EmbedFieldData[] = []; // Discord entries.
 	const allMonths: Record<string, moment.Moment[]> = {}; // All months.
-	let firstMonth: moment.Moment[]; // First month.
 
 	// Sort events by date.
 	events = events.sort((a, b) => {
@@ -45,8 +44,6 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 		if (!month) month = [];
 		month.push(date);
 
-		if (i == 0) firstMonth = month;
-
 		allMonths[key] = month;
 
 		// Add event entries.
@@ -59,13 +56,9 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 	// Add events entries.
 	embed.setFields(fields);
 
-	// Get first momth data.
-	const eventDays = firstMonth.map((date) => date.date());
-	const month = firstMonth[0].month();
-	const year = firstMonth[0].year();
-
-	// Set image of first month.
-	const base64Img = await getCalendarImgWithEvents(month, year, eventDays);
+	// Set image of months.
+	const monthValues = Object.values(allMonths);
+	const base64Img = await getCalendarImgWithEvents(monthValues);
 	const imageStream = Buffer.from(base64Img, "base64");
 	const file = new MessageAttachment(imageStream, "img.png");
 	embed.setImage("attachment://img.png");

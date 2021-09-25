@@ -1,6 +1,23 @@
+import { table } from "console";
 import moment from "moment";
 import { Calendar, CalendarData } from "node-calendar-js";
 import htmlToImg from "node-html-to-image";
+
+const weekDays = ["L", "M", "X", "J", "V", "S", "D"];
+const months = [
+	"Enero",
+	"Febrero",
+	"Marzo",
+	"Abril",
+	"Mayo",
+	"Junio",
+	"Julio",
+	"Agosto",
+	"Septiembre",
+	"Octubre",
+	"Noviembre",
+	"Diciembre",
+];
 
 const convertSundayToMondayFormat = (calendar: Calendar) => {
 	const json = calendar.toJSON();
@@ -49,7 +66,7 @@ const addEventsToCalendar = (
 	return calendarData;
 };
 
-const getCalendarImgWithEvents = async (
+const getHtmlWithEvents = async (
 	month: number,
 	year: number,
 	eventDays: number[]
@@ -60,87 +77,12 @@ const getCalendarImgWithEvents = async (
 	});
 
 	calendar.holidays = [];
-	calendar.days = ["L", "M", "X", "J", "V", "S", "D"];
-	calendar.months = [
-		"Enero",
-		"Febrero",
-		"Marzo",
-		"Abril",
-		"Mayo",
-		"Junio",
-		"Julio",
-		"Agosto",
-		"Septiembre",
-		"Octubre",
-		"Noviembre",
-		"Diciembre",
-	];
+	calendar.days = weekDays;
+	calendar.months = months;
 
 	const cal = convertSundayToMondayFormat(calendar);
 	const calWithEvents = addEventsToCalendar(cal, eventDays);
 	const weeks = stripInWeeks(calWithEvents);
-
-	const style = `
-    <style>
-      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap');
-
-      body {
-        height: ${weeks.length === 5 ? "494" : "562"}px;
-        width: 500px;
-      }
-
-      th,
-      td {
-        width: 50px;
-        height: 50px;
-        line-height: 50px;
-        border-radius: 5rem;
-        margin: 8px;
-      }
-      
-      .day {
-        background-color: #2e2e2e;
-        text-align: center;
-      }
-
-      .empty {
-        background-color: #575757;
-      }
-
-      .event {
-        background-color: #5A55F8;
-        font-weight: 400;
-      }
-
-      table,
-      caption {
-        color: #f5f5f5;
-        background-color: #1a1a1a;
-        font-family: "Roboto", sans-serif;
-        font-weight: 400;
-      }
-
-      table {
-        padding: 10px;
-        border-radious: 10px;
-      }
-
-      caption {
-        height: 30px;
-        line-height: 30px;
-        width: 100% !important;
-        font-size: 2rem;
-        padding-top: 30px;
-      }
-
-
-      tr {
-        display: flex;
-        justify-content: space-around;
-        align-items: center;
-      }
-    </style> 
-  `;
 
 	const table = `
     <table>
@@ -173,16 +115,100 @@ const getCalendarImgWithEvents = async (
     </table>
   `;
 
+	return table;
+};
+
+const getCalendarImgWithEvents = async (months: moment.Moment[][]) => {
+	let tables = "";
+
+	for (const monthData of months) {
+		const days = monthData.map((date) => date.date());
+		const month = monthData[0].month();
+		const year = monthData[0].year();
+
+		tables += await getHtmlWithEvents(month, year, days);
+	}
+
+	const style = `
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100;400&display=swap');
+
+      body {
+        height: auto;
+				background-color: #1a1a1a;
+        display: flex;
+        flex-direction:row;
+				flex-wrap:wrap;
+        width: ${months.length === 1 ? 500 : 1000}px;
+        justify-content: center;
+        align-items: center;
+      }
+
+      th,
+      td {
+        width: 50px;
+        height: 50px;
+        line-height: 50px;
+        border-radius: 5rem;
+        margin: 8px;
+      }
+      
+      .day {
+        background-color: #2e2e2e;
+        text-align: center;
+      }
+
+      .empty {
+        background-color: #575757;
+      }
+
+      .event {
+        background-color: #5A55F8;
+        font-weight: 400;
+      }
+
+      table,
+      caption {
+        color: #f5f5f5;
+        background-color: inherit;
+        font-family: "Roboto", sans-serif;
+        font-weight: 400;
+      }
+
+      table {
+        padding: 10px;
+        border-radious: 10px;
+      }
+
+      caption {
+        height: 30px;
+        line-height: 30px;
+        width: 100% !important;
+        font-size: 2rem;
+        padding-top: 30px;
+      }
+
+
+      tr {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+      }
+    </style> 
+  `;
+
 	const html = `
     <html>
       <head>
         ${style}
       </head>
       <body>
-        ${table}
+        ${tables}
       </body>
     </html>
   `;
+
+	console.log(html);
 
 	const imgBuffer = await htmlToImg({
 		html,
