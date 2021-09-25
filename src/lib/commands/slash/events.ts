@@ -32,9 +32,9 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 	embed.setThumbnail("attachment://thumbnail.png");
 
 	// Get all events by month.
-	const eventDates = events.map((event) => moment(event.start.date));
-	const allMonths: Record<string, typeof eventDates> = {};
-	eventDates.forEach((date) => {
+	const allMonths: Record<string, moment.Moment[]> = {};
+	events.forEach((event) => {
+		const date = moment(event.start.date);
 		const key = date.format("MM/YYYY");
 		let monthYear = allMonths[key];
 
@@ -60,7 +60,7 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 	// Add events entries.
 	const fields: EmbedFieldData[] = events.map((event, i) => ({
 		name: event.summary,
-		value: eventDates[i].format("DD/MM/YYYY"),
+		value: moment(event.start.date).format("DD/MM/YYYY"),
 	}));
 	embed.setFields(fields);
 
