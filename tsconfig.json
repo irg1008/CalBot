@@ -17,6 +17,10 @@
     "declaration": true,
     "resolveJsonModule": true,
     "baseUrl": "src",
+    //"strict": false,
+    "forceConsistentCasingInFileNames": true,
+    "importHelpers": true,
+    "removeComments": true
   },
   "include": [
     "src"

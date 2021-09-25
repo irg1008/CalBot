@@ -1,8 +1,43 @@
-// Check if calendar has apiKey and calId
+import moment from "moment";
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { SlashCommand, SlashCommandExecute } from "types/Discord.types";
 import { getCalendarEvents, Event } from "google-calendar-node-api";
 import { getTagsFromChannel, getCalendarConfig } from "db/api";
+import getCalendarImgWithEvents from "utils/getCalendarImg";
+import Discord, {
+	MessageEmbed,
+	MessageAttachment,
+	EmbedFieldData,
+} from "discord.js";
+
+const createRichEmbedForEvents = async (events: Event[]) => {
+	// TODO: Create embedded and avoid numerous loops here.
+	// TODO: Get as much images as events on different months.
+	// TODO: Implement these with the loop command. Maybe disbale loop public state and only use here.
+
+	const eventDates = events.map((event) => moment(event.end.date));
+	const eventDays = eventDates.map((date) => date.date() - 1);
+	const month = eventDates[0].month();
+	const year = eventDates[0].year();
+
+	// Create embedded.
+	const embed = new MessageEmbed().setColor("#099ff").setTitle("Eventos");
+
+	// Add events entries.
+	const fields: EmbedFieldData[] = events.map((event, i) => ({
+		name: `Evento (${moment(event.start.date).format("DD/MM/YYYY")})`,
+		value: event.summary,
+	}));
+	embed.setFields(fields);
+
+	// Set images.
+	const base64Img = await getCalendarImgWithEvents(month, year, eventDays);
+	const imageStream = Buffer.from(base64Img, "base64");
+	const file = new MessageAttachment(imageStream, "img.png");
+	embed.setImage("attachment://img.png");
+
+	return { embeds: [embed], files: [file] };
+};
 
 const eventsExecute: SlashCommandExecute = async (_, interaction) => {
 	const { guildId, options, channelId } = interaction;
@@ -45,13 +80,14 @@ const eventsExecute: SlashCommandExecute = async (_, interaction) => {
 		}
 	}
 
-	const eventNames = events.map((event) => event.summary).slice(0, 20);
-
-	await interaction.followUp({
-		content: `Successfuly retrieved events. N: ${
-			events.length
-		}\n${JSON.stringify(eventNames, null, 2)}`,
-	});
+	if (events.length === 0) {
+		await interaction.followUp({
+			content: "No events were found with the channel tags",
+		});
+	} else {
+		const { embeds, files } = await createRichEmbedForEvents(events);
+		await interaction.channel.send({ embeds, files });
+	}
 };
 
 const command: SlashCommand = {
