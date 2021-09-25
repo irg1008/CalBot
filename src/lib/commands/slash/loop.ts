@@ -12,7 +12,7 @@ const loopExecute: SlashCommandExecute = async (_, interaction) => {
 
 	switch (subcommand) {
 		case "start": {
-			if (isJobRunning) job.destroy();
+			if (isJobRunning) job.stop();
 
 			const time = interaction.options.getString("time");
 			const isValid = moment(time, ["HH:mm", "HH:mm a"], true).isValid();
@@ -41,7 +41,7 @@ const loopExecute: SlashCommandExecute = async (_, interaction) => {
 		}
 		case "stop": {
 			if (isJobRunning) {
-				job.destroy();
+				job.stop();
 
 				await interaction.followUp({
 					content: "⏰ Loop Stopped!",
