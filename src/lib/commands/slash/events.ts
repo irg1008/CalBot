@@ -34,7 +34,7 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 	// Loop all events to store first month and discord embed entries.
 	const allMonths: Record<string, moment.Moment[]> = {}; // All months.
 	const fields: EmbedFieldData[] = []; // Discord entries.
-	events.forEach((event, i) => {
+	events.forEach((event) => {
 		const date = moment(event.start.date);
 		const key = date.format("MM/YYYY");
 		let month = allMonths[key];
@@ -99,6 +99,7 @@ const eventsExecute: SlashCommandExecute = async (_, interaction) => {
 			for (const tag of channelTags) {
 				const { data: tagEvents, error } = await getCalendarEvents({
 					q: tag,
+					timeMin: moment().toISOString(),
 					...calendarConfig,
 				});
 				if (error) return await errorHappened();
