@@ -42,8 +42,8 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 
 	// Add events entries.
 	const fields: EmbedFieldData[] = events.map((event, i) => ({
-		name: `Evento (${moment(event.start.date).format("DD/MM/YYYY")})`,
-		value: event.summary,
+		name: event.summary,
+		value: moment(event.start.date).format("DD/MM/YYYY"),
 	}));
 	embed.setFields(fields);
 
