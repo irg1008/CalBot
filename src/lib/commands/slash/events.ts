@@ -4,21 +4,18 @@ import { SlashCommand, SlashCommandExecute } from "types/Discord.types";
 import { getCalendarEvents, Event } from "google-calendar-node-api";
 import { getTagsFromChannel, getCalendarConfig } from "db/api";
 import getCalendarImgWithEvents from "utils/getCalendarImg";
-import Discord, {
-	MessageEmbed,
-	MessageAttachment,
-	EmbedFieldData,
-} from "discord.js";
+import { MessageEmbed, MessageAttachment, EmbedFieldData } from "discord.js";
 
 const createRichEmbedForEvents = async (events: Event[]) => {
-	// TODO: Create embedded and avoid numerous loops here.
-	// TODO: Get as much images as events on different months.
-	// TODO: Implement these with the loop command. Maybe disbale loop public state and only use here.
+	// Sort events by date.
+	events = events.sort((a, b) => {
+		const aDate = moment(a.start.date);
+		const bDate = moment(b.start.date);
 
-	const eventDates = events.map((event) => moment(event.end.date));
-	const eventDays = eventDates.map((date) => date.date() - 1);
-	const month = eventDates[0].month();
-	const year = eventDates[0].year();
+		if (bDate.isAfter(aDate)) return -1;
+		if (bDate.isSame(aDate)) return 0;
+		return 1;
+	});
 
 	// Create embedded.
 	const embed = new MessageEmbed()
@@ -34,7 +31,27 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 	);
 	embed.setThumbnail("attachment://thumbnail.png");
 
-	// Set images.
+	// Get all events by month.
+	const eventDates = events.map((event) => moment(event.start.date));
+	const allMonths: Record<string, typeof eventDates> = {};
+	eventDates.forEach((date) => {
+		const key = date.format("MM/YYYY");
+		let monthYear = allMonths[key];
+
+		// If empty => initialize.
+		if (!monthYear) monthYear = [];
+		monthYear.push(date);
+
+		allMonths[key] = monthYear;
+	});
+
+	// Show only first month.
+	const firstMonthDates = Object.values(allMonths)[0];
+	const eventDays = firstMonthDates.map((date) => date.date());
+	const month = firstMonthDates[0].month();
+	const year = firstMonthDates[0].year();
+
+	// Set image of first month.
 	const base64Img = await getCalendarImgWithEvents(month, year, eventDays);
 	const imageStream = Buffer.from(base64Img, "base64");
 	const file = new MessageAttachment(imageStream, "img.png");
@@ -43,7 +60,7 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 	// Add events entries.
 	const fields: EmbedFieldData[] = events.map((event, i) => ({
 		name: event.summary,
-		value: moment(event.start.date).format("DD/MM/YYYY"),
+		value: eventDates[i].format("DD/MM/YYYY"),
 	}));
 	embed.setFields(fields);
 
