@@ -7,16 +7,6 @@ import getCalendarImgWithEvents from "utils/getCalendarImg";
 import { MessageEmbed, MessageAttachment, EmbedFieldData } from "discord.js";
 
 const createRichEmbedForEvents = async (events: Event[]) => {
-	// Sort events by date.
-	events = events.sort((a, b) => {
-		const aDate = moment(a.start.date);
-		const bDate = moment(b.start.date);
-
-		if (bDate.isAfter(aDate)) return -1;
-		if (bDate.isSame(aDate)) return 0;
-		return 1;
-	});
-
 	// Create embedded.
 	const embed = new MessageEmbed()
 		.setColor("#099ff")
@@ -31,9 +21,21 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 	);
 	embed.setThumbnail("attachment://thumbnail.png");
 
-	// Get all events by month.
-	const allMonths: Record<string, moment.Moment[]> = {};
-	let firstMonth: moment.Moment[];
+	const fields: EmbedFieldData[] = []; // Discord entries.
+	const allMonths: Record<string, moment.Moment[]> = {}; // All months.
+	let firstMonth: moment.Moment[]; // First month.
+
+	// Sort events by date.
+	events = events.sort((a, b) => {
+		const aDate = moment(a.start.date);
+		const bDate = moment(b.start.date);
+
+		if (bDate.isAfter(aDate)) return -1;
+		if (bDate.isSame(aDate)) return 0;
+		return 1;
+	});
+
+	// Loop all events to store first month and discord embed entries.
 	events.forEach((event, i) => {
 		const date = moment(event.start.date);
 		const key = date.format("MM/YYYY");
@@ -43,14 +45,21 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 		if (!month) month = [];
 		month.push(date);
 
-		if (i == 0) {
-			firstMonth = month;
-		}
+		if (i == 0) firstMonth = month;
 
 		allMonths[key] = month;
+
+		// Add event entries.
+		fields.push({
+			name: event.summary,
+			value: date.format("DD/MM/YYYY"),
+		});
 	});
 
-	// Show only first month.
+	// Add events entries.
+	embed.setFields(fields);
+
+	// Get first momth data.
 	const eventDays = firstMonth.map((date) => date.date());
 	const month = firstMonth[0].month();
 	const year = firstMonth[0].year();
@@ -60,13 +69,6 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 	const imageStream = Buffer.from(base64Img, "base64");
 	const file = new MessageAttachment(imageStream, "img.png");
 	embed.setImage("attachment://img.png");
-
-	// Add events entries.
-	const fields: EmbedFieldData[] = events.map((event, i) => ({
-		name: event.summary,
-		value: moment(event.start.date).format("DD/MM/YYYY"),
-	}));
-	embed.setFields(fields);
 
 	return { embeds: [embed], files: [file, thumbFile] };
 };
