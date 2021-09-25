@@ -23,8 +23,16 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 	// Create embedded.
 	const embed = new MessageEmbed()
 		.setColor("#099ff")
-		.setTitle("Eventos")
-		.setDescription("Estos son los próximos eventos para este canal");
+		.setTitle("Próximos Eventos")
+		.setDescription("Estos son los próximos eventos para este canal:")
+		.setAuthor("CalBot - Tu calendario de confianza");
+
+	// Set thumbnail.
+	const thumbFile = new MessageAttachment(
+		"static/bot_small.png",
+		"thumbnail.png"
+	);
+	embed.setThumbnail("attachment://thumbnail.png");
 
 	// Set images.
 	const base64Img = await getCalendarImgWithEvents(month, year, eventDays);
@@ -39,7 +47,7 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 	}));
 	embed.setFields(fields);
 
-	return { embeds: [embed], files: [file] };
+	return { embeds: [embed], files: [file, thumbFile] };
 };
 
 const eventsExecute: SlashCommandExecute = async (_, interaction) => {
