@@ -7,6 +7,8 @@ import getCalendarImgWithEvents from "utils/getCalendarImg";
 import { MessageEmbed, MessageAttachment, EmbedFieldData } from "discord.js";
 
 const createRichEmbedForEvents = async (events: Event[]) => {
+	console.log(events);
+
 	// Create embedded.
 	const embed = new MessageEmbed()
 		.setColor("#099ff")
@@ -23,8 +25,8 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 
 	// Sort events by date.
 	events = events.sort((a, b) => {
-		const aDate = moment(a.start.date);
-		const bDate = moment(b.start.date);
+		const aDate = moment(a.start.date || a.start.dateTime);
+		const bDate = moment(b.start.date || a.start.dateTime);
 
 		if (bDate.isAfter(aDate)) return -1;
 		if (bDate.isSame(aDate)) return 0;
@@ -35,7 +37,7 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 	const allMonths: Record<string, moment.Moment[]> = {}; // All months.
 	const fields: EmbedFieldData[] = []; // Discord entries.
 	events.forEach((event) => {
-		const date = moment(event.start.date);
+		const date = moment(event.start.date || event.start.dateTime);
 		const key = date.format("MM/YYYY");
 		let month = allMonths[key];
 
