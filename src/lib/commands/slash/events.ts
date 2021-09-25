@@ -81,9 +81,11 @@ const eventsExecute: SlashCommandExecute = async (_, interaction) => {
 	};
 
 	let events: Event[] = [];
+	const now = moment().toISOString();
 
 	if (getAllOption) {
 		const { data: allEvents, error } = await getCalendarEvents({
+			timeMin: now,
 			...calendarConfig,
 		});
 		if (error) return await errorHappened();
@@ -101,7 +103,7 @@ const eventsExecute: SlashCommandExecute = async (_, interaction) => {
 			for (const tag of channelTags) {
 				const { data: tagEvents, error } = await getCalendarEvents({
 					q: tag,
-					timeMin: moment().toISOString(),
+					timeMin: now,
 					...calendarConfig,
 				});
 				if (error) return await errorHappened();
