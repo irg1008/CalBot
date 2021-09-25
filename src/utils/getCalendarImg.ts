@@ -85,7 +85,7 @@ const getCalendarImgWithEvents = async (
     @import url('https://fonts.googleapis.com/css2?family=Roboto:wght@100&display=swap');
 
     body {
-      height: ${weeks.length === 5 ? "380" : "456"}px;
+      height: ${weeks.length === 5 ? "380" : "440"}px;
       width: 400px;
     }
 
@@ -108,6 +108,7 @@ const getCalendarImgWithEvents = async (
     }
 
     .event {
+      color: #1a1a1a;
       background-color: #1AA9E8;
     }
 
