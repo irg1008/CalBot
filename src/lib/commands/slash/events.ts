@@ -29,7 +29,7 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 
 	// Set thumbnail.
 	const thumbFile = new MessageAttachment(
-		"static/bot_small.png",
+		"static/bot_medium.png",
 		"thumbnail.png"
 	);
 	embed.setThumbnail("attachment://thumbnail.png");
