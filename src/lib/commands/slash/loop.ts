@@ -23,6 +23,9 @@ const loopExecute: SlashCommandExecute = async (_, interaction) => {
 				const [h, m] = time.split(":");
 				const cronString = `${m} ${h} * * *`;
 
+				console.log(`New job starting at ${time}`);
+				console.log(`Current time is ${moment()}`);
+
 				job = new CronJob(
 					cronString,
 					async () => {
