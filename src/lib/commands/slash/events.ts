@@ -7,8 +7,6 @@ import getCalendarImgWithEvents from "utils/getCalendarImg";
 import { MessageEmbed, MessageAttachment, EmbedFieldData } from "discord.js";
 
 const createRichEmbedForEvents = async (events: Event[]) => {
-	console.log(events);
-
 	// Create embedded.
 	const embed = new MessageEmbed()
 		.setColor("#099ff")
