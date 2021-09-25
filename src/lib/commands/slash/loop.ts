@@ -35,11 +35,11 @@ const loopExecute: SlashCommandExecute = async (_, interaction) => {
 				await interaction.followUp({
 					content: `⏰ The bot will notify daily at ${time}`,
 				});
+			} else {
+				await interaction.followUp({
+					content: `Invalid Time (${time})`,
+				});
 			}
-
-			await interaction.followUp({
-				content: `Invalid Time (${time})`,
-			});
 
 			break;
 		}
