@@ -33,23 +33,27 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 
 	// Get all events by month.
 	const allMonths: Record<string, moment.Moment[]> = {};
-	events.forEach((event) => {
+	let firstMonth: moment.Moment[];
+	events.forEach((event, i) => {
 		const date = moment(event.start.date);
 		const key = date.format("MM/YYYY");
-		let monthYear = allMonths[key];
+		let month = allMonths[key];
 
 		// If empty => initialize.
-		if (!monthYear) monthYear = [];
-		monthYear.push(date);
+		if (!month) month = [];
+		month.push(date);
 
-		allMonths[key] = monthYear;
+		if (i == 0) {
+			firstMonth = month;
+		}
+
+		allMonths[key] = month;
 	});
 
 	// Show only first month.
-	const firstMonthDates = Object.values(allMonths)[0];
-	const eventDays = firstMonthDates.map((date) => date.date());
-	const month = firstMonthDates[0].month();
-	const year = firstMonthDates[0].year();
+	const eventDays = firstMonth.map((date) => date.date());
+	const month = firstMonth[0].month();
+	const year = firstMonth[0].year();
 
 	// Set image of first month.
 	const base64Img = await getCalendarImgWithEvents(month, year, eventDays);
