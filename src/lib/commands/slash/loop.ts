@@ -29,7 +29,7 @@ const loopExecute: SlashCommandExecute = async (_, interaction) => {
 						});
 						await eventCommand.execute(_, interaction);
 					},
-					{ timezone: "Europe/London", scheduled: true }
+					{ timezone: "Europe/Madrid", scheduled: true }
 				);
 
 				await interaction.followUp({
