@@ -188,7 +188,8 @@ const getCalendarImgWithEvents = async (
 		html,
 		encoding: "base64",
 		puppeteerArgs: {
-			args: ["--no-sandbox"],
+			headless: true,
+			args: ["--no-sandbox", "--disable-setuid-sandbox"],
 		},
 	});
 
