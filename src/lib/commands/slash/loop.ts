@@ -1,37 +1,33 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { SlashCommand, SlashCommandExecute } from "types/Discord.types";
-import { CronJob } from "cron";
+import cron, { ScheduledTask } from "node-cron";
 import moment from "moment";
 import eventCommand from "./events";
 
-let job: CronJob;
+let job: ScheduledTask;
 
 const loopExecute: SlashCommandExecute = async (_, interaction) => {
 	const subcommand = interaction.options.getSubcommand() as "start" | "stop";
-	const isJobRunning = job?.running;
+	let isJobRunning = !!job;
 
 	switch (subcommand) {
 		case "start": {
-			if (isJobRunning) job.stop();
+			if (isJobRunning) job.destroy();
 
 			const time = interaction.options.getString("time");
-			const isValid = moment(time, ["HH:mm"], true).isValid();
+			const isValid = moment(time, ["HH:mm", "HH:mm a"], true).isValid();
 
 			if (isValid) {
 				const [h, m] = time.split(":");
 				const cronString = `${m} ${h} * * *`;
 
-				job = new CronJob(
-					cronString,
-					async () => {
-						await interaction.followUp({
-							content: "⏰ Daily events incoming!!",
-						});
-						await eventCommand.execute(_, interaction);
-					},
-					null,
-					true
-				);
+				job = cron.schedule(cronString, async () => {
+					await interaction.followUp({
+						content: "⏰ Daily events incoming!!",
+					});
+					await eventCommand.execute(_, interaction);
+				});
+
 				await interaction.followUp({
 					content: `⏰ The bot will notify daily at ${time}`,
 				});
@@ -45,7 +41,7 @@ const loopExecute: SlashCommandExecute = async (_, interaction) => {
 		}
 		case "stop": {
 			if (isJobRunning) {
-				job.stop();
+				job.destroy();
 
 				await interaction.followUp({
 					content: "⏰ Loop Stopped!",

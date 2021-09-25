@@ -208,8 +208,6 @@ const getCalendarImgWithEvents = async (months: moment.Moment[][]) => {
     </html>
   `;
 
-	console.log(html);
-
 	const imgBuffer = await htmlToImg({
 		html,
 		encoding: "base64",
