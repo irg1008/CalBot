@@ -1,4 +1,3 @@
-import { table } from "console";
 import moment from "moment";
 import { Calendar, CalendarData } from "node-calendar-js";
 import htmlToImg from "node-html-to-image";
@@ -87,6 +86,8 @@ const getHtmlWithEvents = async (
 	const calWithEvents = addEventsToCalendar(cal, eventDays);
 	const weeks = stripInWeeks(calWithEvents);
 
+	const today = moment().date();
+
 	const table = `
     <table>
       <caption>${calendar.months[cal.month]}${" "}${cal.year}</caption>
@@ -103,10 +104,10 @@ const getHtmlWithEvents = async (
             ${week
 							.map(
 								(day) =>
-									`<td class="${day.holiday ? "event" : ""} day ${
+									`<td class="${day.holiday ? "event" : ""} ${
 										!day.day ? "empty" : ""
-									}">
-                    ${day.day || ""}
+									} ${day.day === today ? "today" : ""} day">
+										${day.day || ""}
                   </td>`
 							)
 							.join("\n")}
@@ -160,6 +161,10 @@ const getCalendarImgWithEvents = async (months: moment.Moment[][]) => {
         background-color: #2e2e2e;
         text-align: center;
       }
+
+			.today {
+				border-radius: 0.5px #f5f5f5 solid;
+			}
 
       .empty {
         background-color: #575757;
