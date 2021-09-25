@@ -118,7 +118,6 @@ const getCalendarImgWithEvents = async (
         background-color: #1a1a1a;
         font-family: "Roboto", sans-serif;
         font-weight: 400;
-        border-radius: 0 0 20px 20px;
       }
 
       table {
@@ -132,7 +131,6 @@ const getCalendarImgWithEvents = async (
         width: 100% !important;
         font-size: 2rem;
         padding-top: 30px;
-        border-radius: 20px 20px 0 0;
       }
 
 
