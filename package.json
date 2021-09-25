@@ -30,7 +30,7 @@
 		"discord-api-types": "^0.23.1",
 		"discord.js": "^13.1.0",
 		"dotenv": "^10.0.0",
-		"google-calendar-node-api": "^0.1.6",
+		"google-calendar-node-api": "^0.1.7",
 		"moment": "^2.29.1",
 		"node-calendar-js": "^1.0.3",
 		"node-html-to-image": "^3.2.0"
