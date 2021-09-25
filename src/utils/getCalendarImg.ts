@@ -86,7 +86,13 @@ const getHtmlWithEvents = async (
 	const calWithEvents = addEventsToCalendar(cal, eventDays);
 	const weeks = stripInWeeks(calWithEvents);
 
-	const today = moment().date();
+	const cDate = moment();
+	const cMonth = cDate.month();
+	const cYear = cDate.year();
+	const cDay = cDate.date();
+
+	const isToday = (day: number) =>
+		day === cDay && month === cMonth && year === cYear;
 
 	const table = `
     <table>
@@ -106,7 +112,7 @@ const getHtmlWithEvents = async (
 								(day) =>
 									`<td class="${day.holiday ? "event" : ""} ${
 										!day.day ? "empty" : ""
-									} ${day.day === today ? "today" : ""} day">
+									} ${isToday(day.day) ? "today" : ""} day">
 										${day.day || ""}
                   </td>`
 							)
