@@ -25,7 +25,7 @@ const loopExecute: SlashCommandExecute = async (_, interaction) => {
 					cronString,
 					async () => {
 						await interaction.followUp({
-							content: `⏰ Daily ${time} events notifications incoming!!`,
+							content: "⏰ Daily events incoming!!",
 						});
 						await eventCommand.execute(_, interaction);
 					},

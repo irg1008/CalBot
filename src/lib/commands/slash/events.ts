@@ -94,7 +94,7 @@ const eventsExecute: SlashCommandExecute = async (_, interaction) => {
 
 	if (events.length > 0) {
 		const { embeds, files } = await createRichEmbedForEvents(events);
-		await interaction.channel.send({ embeds, files });
+		await interaction.followUp({ embeds, files });
 	}
 };
 
