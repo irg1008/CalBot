@@ -163,7 +163,7 @@ const getCalendarImgWithEvents = async (months: moment.Moment[][]) => {
       }
 
 			.today {
-				border-radius: 0.5px #f5f5f5 solid;
+				border: 1px #f5f5f5 solid;
 			}
 
       .empty {
@@ -185,7 +185,6 @@ const getCalendarImgWithEvents = async (months: moment.Moment[][]) => {
 
       table {
         padding: 10px;
-        border-radious: 10px;
       }
 
       caption {
