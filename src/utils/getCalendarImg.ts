@@ -143,7 +143,7 @@ const getCalendarImgWithEvents = async (months: moment.Moment[][]) => {
         display: flex;
         flex-direction:row;
 				flex-wrap:wrap;
-        width: ${months.length === 1 ? 500 : 1000}px;
+        width: ${months.length === 1 ? 510 : 1020}px;
         justify-content: center;
         align-items: start;
       }
