@@ -50,7 +50,10 @@ const stripInWeeks = (calendarData: CalendarData) => {
 
 	for (let i = 0; i < days.length; i += 7) {
 		const chunk = days.slice(i, i + 7);
-		chunkedArray.push(chunk);
+		// I chunk is not empty.
+		if (chunk.find((day) => day.day)) {
+			chunkedArray.push(chunk);
+		}
 	}
 
 	return chunkedArray;
