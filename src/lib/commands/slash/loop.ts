@@ -1,14 +1,15 @@
 import { SlashCommandBuilder } from "@discordjs/builders";
 import { SlashCommand, SlashCommandExecute } from "types/Discord.types";
-import cron, { ScheduledTask } from "node-cron";
+import { CronJob } from "cron";
 import moment from "moment";
 import eventCommand from "./events";
+import { Timezone } from "google-calendar-node-api/dist/types/Timezone.types";
 
-let job: ScheduledTask;
+let job: CronJob;
 
 const loopExecute: SlashCommandExecute = async (_, interaction) => {
 	const subcommand = interaction.options.getSubcommand() as "start" | "stop";
-	let isJobRunning = !!job;
+	let isJobRunning = job?.running;
 
 	switch (subcommand) {
 		case "start": {
@@ -16,12 +17,13 @@ const loopExecute: SlashCommandExecute = async (_, interaction) => {
 
 			const time = interaction.options.getString("time");
 			const isValid = moment(time, ["HH:mm"], true).isValid();
+			const timezone: Timezone = "Europe/Madrid";
 
 			if (isValid) {
 				const [h, m] = time.split(":");
 				const cronString = `${m} ${h} * * *`;
 
-				job = cron.schedule(
+				job = new CronJob(
 					cronString,
 					async () => {
 						await interaction.followUp({
@@ -29,7 +31,9 @@ const loopExecute: SlashCommandExecute = async (_, interaction) => {
 						});
 						await eventCommand.execute(_, interaction);
 					},
-					{ timezone: "Europe/Madrid", scheduled: true }
+					null,
+					true,
+					timezone
 				);
 
 				await interaction.followUp({

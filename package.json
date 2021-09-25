@@ -26,6 +26,7 @@
 		"@discordjs/builders": "^0.6.0",
 		"@discordjs/rest": "0.1.0-canary.0",
 		"@supabase/supabase-js": "^1.23.0",
+		"cron": "^1.8.2",
 		"cross-env": "^7.0.3",
 		"discord-api-types": "^0.23.1",
 		"discord.js": "^13.1.0",
@@ -33,7 +34,6 @@
 		"google-calendar-node-api": "^0.1.8",
 		"moment": "^2.29.1",
 		"node-calendar-js": "^1.0.3",
-		"node-cron": "^3.0.0",
 		"node-html-to-image": "^3.2.0"
 	}
 }
