@@ -21,7 +21,16 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 	const year = eventDates[0].year();
 
 	// Create embedded.
-	const embed = new MessageEmbed().setColor("#099ff").setTitle("Eventos");
+	const embed = new MessageEmbed()
+		.setColor("#099ff")
+		.setTitle("Eventos")
+		.setDescription("Estos son los próximos eventos para este canal");
+
+	// Set images.
+	const base64Img = await getCalendarImgWithEvents(month, year, eventDays);
+	const imageStream = Buffer.from(base64Img, "base64");
+	const file = new MessageAttachment(imageStream, "img.png");
+	embed.setImage("attachment://img.png");
 
 	// Add events entries.
 	const fields: EmbedFieldData[] = events.map((event, i) => ({
@@ -29,12 +38,6 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 		value: event.summary,
 	}));
 	embed.setFields(fields);
-
-	// Set images.
-	const base64Img = await getCalendarImgWithEvents(month, year, eventDays);
-	const imageStream = Buffer.from(base64Img, "base64");
-	const file = new MessageAttachment(imageStream, "img.png");
-	embed.setImage("attachment://img.png");
 
 	return { embeds: [embed], files: [file] };
 };
