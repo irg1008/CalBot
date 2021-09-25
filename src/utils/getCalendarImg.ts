@@ -187,6 +187,9 @@ const getCalendarImgWithEvents = async (
 	const imgBuffer = await htmlToImg({
 		html,
 		encoding: "base64",
+		puppeteerArgs: {
+			args: ["--no-sandbox"],
+		},
 	});
 
 	return imgBuffer as string;
