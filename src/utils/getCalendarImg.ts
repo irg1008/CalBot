@@ -107,8 +107,8 @@ const getCalendarImgWithEvents = async (
       background-color: #575757;
     }
 
-    .holiday {
-      background-color: #be3333;
+    .event {
+      background-color: #1AA9E8;
     }
 
     table,
@@ -155,7 +155,7 @@ const getCalendarImgWithEvents = async (
             ${week
 							.map(
 								(day) =>
-									`<td class="${day.holiday ? "holiday" : ""} day ${
+									`<td class="${day.holiday ? "event" : ""} day ${
 										!day.day ? "empty" : ""
 									}">
                     ${day.day || ""}

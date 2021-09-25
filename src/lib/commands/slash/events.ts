@@ -71,13 +71,14 @@ const eventsExecute: SlashCommandExecute = async (_, interaction) => {
 		});
 		if (error) return await errorHappened();
 		events = allEvents.items;
+		if (allEvents.items.length === 0) return await errorHappened();
 	} else {
 		const channelTags = await getTagsFromChannel({ guildId, channelId });
 
 		if (channelTags.length === 0) {
 			await interaction.followUp({
 				content:
-					"To retrieve events you must first add tags to the channel. Use /tags add",
+					"To retrieve channel events you must first add tags to the channel. Use /tags add",
 			});
 		} else {
 			for (const tag of channelTags) {
@@ -91,11 +92,7 @@ const eventsExecute: SlashCommandExecute = async (_, interaction) => {
 		}
 	}
 
-	if (events.length === 0) {
-		await interaction.followUp({
-			content: "No events were found with the channel tags",
-		});
-	} else {
+	if (events.length > 0) {
 		const { embeds, files } = await createRichEmbedForEvents(events);
 		await interaction.channel.send({ embeds, files });
 	}
