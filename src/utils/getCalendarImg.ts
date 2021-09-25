@@ -169,7 +169,7 @@ const getCalendarImgWithEvents = async (months: moment.Moment[][]) => {
       }
 
 			.today {
-				border: 1px #f5f5f5 solid;
+				border: 2px #f5f5f5 solid;
 			}
 
       .empty {
