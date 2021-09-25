@@ -21,9 +21,6 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 	);
 	embed.setThumbnail("attachment://thumbnail.png");
 
-	const fields: EmbedFieldData[] = []; // Discord entries.
-	const allMonths: Record<string, moment.Moment[]> = {}; // All months.
-
 	// Sort events by date.
 	events = events.sort((a, b) => {
 		const aDate = moment(a.start.date);
@@ -35,6 +32,8 @@ const createRichEmbedForEvents = async (events: Event[]) => {
 	});
 
 	// Loop all events to store first month and discord embed entries.
+	const allMonths: Record<string, moment.Moment[]> = {}; // All months.
+	const fields: EmbedFieldData[] = []; // Discord entries.
 	events.forEach((event, i) => {
 		const date = moment(event.start.date);
 		const key = date.format("MM/YYYY");
