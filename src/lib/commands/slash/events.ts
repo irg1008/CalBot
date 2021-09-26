@@ -17,7 +17,7 @@ const createRichEmbedForEvents = async (
 		.setTitle("Próximos Eventos")
 		.setDescription(
 			all
-				? "Estos son todos los eventos"
+				? "Estos son todos los eventos:"
 				: "Estos son los próximos eventos para este canal:"
 		)
 		.setAuthor("CalBot - Tu calendario de confianza")
