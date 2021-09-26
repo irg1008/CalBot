@@ -6,14 +6,26 @@ import { getTagsFromChannel, getCalendarConfig } from "db/api";
 import getCalendarImgWithEvents from "utils/getCalendarImg";
 import { MessageEmbed, MessageAttachment, EmbedFieldData } from "discord.js";
 
-const createRichEmbedForEvents = async (events: Event[], tags: string[]) => {
+const createRichEmbedForEvents = async (
+	events: Event[],
+	tags: string[],
+	all: boolean
+) => {
 	// Create embedded.
 	const embed = new MessageEmbed()
 		.setColor("#099ff")
 		.setTitle("Próximos Eventos")
-		.setDescription("Estos son los próximos eventos para este canal:")
+		.setDescription(
+			all
+				? "Estos son todos los eventos"
+				: "Estos son los próximos eventos para este canal:"
+		)
 		.setAuthor("CalBot - Tu calendario de confianza")
-		.setFooter(`Etiquetas del canal: ${tags.join(", ")}.`);
+		.setFooter(
+			all
+				? "Etiquetas no eliminadas para identificar eventos"
+				: `Etiquetas del canal: ${tags.join(", ")}.`
+		);
 
 	// Set thumbnail.
 	const thumbFile = new MessageAttachment(
@@ -120,7 +132,8 @@ const eventsExecute: SlashCommandExecute = async (_, interaction) => {
 	if (events.length > 0) {
 		const { embeds, files } = await createRichEmbedForEvents(
 			events,
-			channelTags
+			channelTags,
+			getAllOption
 		);
 		await interaction.followUp({ embeds, files });
 	}
