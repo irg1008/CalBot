@@ -38,6 +38,8 @@ const loopExecute: SlashCommandExecute = async (client, interaction) => {
 
 				job.start();
 
+				client.activeJobs.set(channelId, job);
+
 				await interaction.followUp({
 					content: `⏰ The bot will notify daily at ${time}`,
 				});
@@ -54,6 +56,8 @@ const loopExecute: SlashCommandExecute = async (client, interaction) => {
 				console.log(`Job for channel ${channelId} stopped at ${moment()}`);
 
 				job.stop();
+
+				client.activeJobs.set(channelId, null);
 
 				await interaction.followUp({
 					content: "⏰ Loop Stopped!",
