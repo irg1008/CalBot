@@ -13,7 +13,7 @@ const createRichEmbedForEvents = async (
 ) => {
 	// Create embedded.
 	const embed = new MessageEmbed()
-		.setColor("#099ff")
+		.setColor("#5A55F8")
 		.setTitle("Próximos Eventos")
 		.setDescription(
 			all
