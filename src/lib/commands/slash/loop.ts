@@ -5,10 +5,9 @@ import moment from "moment";
 import eventCommand from "./events";
 import createJob from "utils/createJob";
 
-let job: CronJob;
-
 const loopExecute: SlashCommandExecute = async (_, interaction) => {
 	const subcommand = interaction.options.getSubcommand() as "start" | "stop";
+	let job: CronJob;
 	let isJobRunning = job?.running;
 
 	switch (subcommand) {
