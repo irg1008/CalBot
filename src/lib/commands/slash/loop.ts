@@ -5,16 +5,18 @@ import moment from "moment";
 import eventCommand from "./events";
 import createJob from "utils/createJob";
 
-const loopExecute: SlashCommandExecute = async (_, interaction) => {
-	const subcommand = interaction.options.getSubcommand() as "start" | "stop";
-	let job: CronJob;
+const loopExecute: SlashCommandExecute = async (client, interaction) => {
+	const { channelId, options } = interaction;
+	const subcommand = options.getSubcommand() as "start" | "stop";
+
+	let job = client.activeJobs.get(channelId);
 	let isJobRunning = job?.running;
 
 	switch (subcommand) {
 		case "start": {
 			if (isJobRunning) job.stop();
 
-			const time = interaction.options.getString("time");
+			const time = options.getString("time");
 			const isValid = moment(time, ["HH:mm"], true).isValid();
 
 			if (isValid) {
@@ -31,7 +33,7 @@ const loopExecute: SlashCommandExecute = async (_, interaction) => {
 					await interaction.followUp({
 						content: "⏰ Daily events incoming!!",
 					});
-					await eventCommand.execute(_, interaction);
+					await eventCommand.execute(client, interaction);
 				}, cronString);
 
 				job.start();
@@ -49,9 +51,7 @@ const loopExecute: SlashCommandExecute = async (_, interaction) => {
 		}
 		case "stop": {
 			if (isJobRunning) {
-				console.log(
-					`Job for channel ${interaction.channelId} stopped at ${moment()}`
-				);
+				console.log(`Job for channel ${channelId} stopped at ${moment()}`);
 
 				job.stop();
 
