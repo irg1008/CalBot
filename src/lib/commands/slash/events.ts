@@ -23,7 +23,7 @@ const createRichEmbedForEvents = async (
 		.setAuthor("CalBot - Tu calendario de confianza")
 		.setFooter(
 			all
-				? "Etiquetas no eliminadas para identificar eventos"
+				? "Mostrando todos los eventos."
 				: `Etiquetas del canal: ${tags.join(", ")}.`
 		);
 
