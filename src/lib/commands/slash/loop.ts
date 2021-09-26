@@ -3,7 +3,7 @@ import { SlashCommand, SlashCommandExecute } from "types/Discord.types";
 import { CronJob } from "cron";
 import moment from "moment";
 import eventCommand from "./events";
-import { Timezone } from "google-calendar-node-api/dist/types/Timezone.types";
+import createJob from "utils/createJob";
 
 let job: CronJob;
 
@@ -17,7 +17,6 @@ const loopExecute: SlashCommandExecute = async (_, interaction) => {
 
 			const time = interaction.options.getString("time");
 			const isValid = moment(time, ["HH:mm"], true).isValid();
-			const timezone: Timezone = "Europe/Madrid";
 
 			if (isValid) {
 				const [h, m] = time.split(":");
@@ -26,18 +25,14 @@ const loopExecute: SlashCommandExecute = async (_, interaction) => {
 				console.log(`New job starting at ${time}`);
 				console.log(`Current time is ${moment()}`);
 
-				job = new CronJob(
-					cronString,
-					async () => {
-						await interaction.followUp({
-							content: "⏰ Daily events incoming!!",
-						});
-						await eventCommand.execute(_, interaction);
-					},
-					null,
-					true,
-					timezone
-				);
+				job = createJob(async () => {
+					await interaction.followUp({
+						content: "⏰ Daily events incoming!!",
+					});
+					await eventCommand.execute(_, interaction);
+				}, cronString);
+
+				job.start();
 
 				await interaction.followUp({
 					content: `⏰ The bot will notify daily at ${time}`,
@@ -52,6 +47,8 @@ const loopExecute: SlashCommandExecute = async (_, interaction) => {
 		}
 		case "stop": {
 			if (isJobRunning) {
+				console.log(`Job stopped at ${moment()}`);
+
 				job.stop();
 
 				await interaction.followUp({
