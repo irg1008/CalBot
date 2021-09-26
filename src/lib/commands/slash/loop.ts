@@ -21,8 +21,11 @@ const loopExecute: SlashCommandExecute = async (_, interaction) => {
 				const [h, m] = time.split(":");
 				const cronString = `${m} ${h} * * *`;
 
-				console.log(`New job starting at ${time}`);
-				console.log(`Current time is ${moment()}`);
+				console.log(
+					`New job starting at ${time} for channel ${
+						interaction.channelId
+					}. Time: ${moment()}`
+				);
 
 				job = createJob(async () => {
 					await interaction.followUp({
@@ -46,7 +49,9 @@ const loopExecute: SlashCommandExecute = async (_, interaction) => {
 		}
 		case "stop": {
 			if (isJobRunning) {
-				console.log(`Job stopped at ${moment()}`);
+				console.log(
+					`Job for channel ${interaction.channelId} stopped at ${moment()}`
+				);
 
 				job.stop();
 
