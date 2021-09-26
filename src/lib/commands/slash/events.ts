@@ -6,13 +6,14 @@ import { getTagsFromChannel, getCalendarConfig } from "db/api";
 import getCalendarImgWithEvents from "utils/getCalendarImg";
 import { MessageEmbed, MessageAttachment, EmbedFieldData } from "discord.js";
 
-const createRichEmbedForEvents = async (events: Event[]) => {
+const createRichEmbedForEvents = async (events: Event[], tags: string[]) => {
 	// Create embedded.
 	const embed = new MessageEmbed()
 		.setColor("#099ff")
 		.setTitle("Próximos Eventos")
 		.setDescription("Estos son los próximos eventos para este canal:")
-		.setAuthor("CalBot - Tu calendario de confianza");
+		.setAuthor("CalBot - Tu calendario de confianza")
+		.setFooter(`Etiquetas del canal: ${tags.join(", ")}.`);
 
 	// Set thumbnail.
 	const thumbFile = new MessageAttachment(
@@ -79,6 +80,7 @@ const eventsExecute: SlashCommandExecute = async (_, interaction) => {
 	};
 
 	let events: Event[] = [];
+	let channelTags: string[] = [];
 	const now = moment().toISOString();
 
 	if (getAllOption) {
@@ -90,7 +92,7 @@ const eventsExecute: SlashCommandExecute = async (_, interaction) => {
 		events = allEvents.items;
 		if (allEvents.items.length === 0) return await errorHappened();
 	} else {
-		const channelTags = await getTagsFromChannel({ guildId, channelId });
+		channelTags = await getTagsFromChannel({ guildId, channelId });
 
 		if (channelTags.length === 0) {
 			await interaction.followUp({
@@ -105,13 +107,21 @@ const eventsExecute: SlashCommandExecute = async (_, interaction) => {
 					...calendarConfig,
 				});
 				if (error) return await errorHappened();
-				events.push(...tagEvents.items);
+				// Remove the tag string from the events and trim initial whitespaces.
+				for (const item of tagEvents.items) {
+					const newSum = item.summary.split(tag).join("").trimStart();
+					item.summary = newSum;
+					events.push(item);
+				}
 			}
 		}
 	}
 
 	if (events.length > 0) {
-		const { embeds, files } = await createRichEmbedForEvents(events);
+		const { embeds, files } = await createRichEmbedForEvents(
+			events,
+			channelTags
+		);
 		await interaction.followUp({ embeds, files });
 	}
 };
