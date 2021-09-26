@@ -35,14 +35,22 @@ const createRichEmbedForEvents = async (
 	embed.setThumbnail("attachment://thumbnail.png");
 
 	// Sort events by date.
+	console.log("--------------------");
+	console.log(events.map((event) => event.start));
+	console.log("--");
 	events = events.sort((a, b) => {
-		const aDate = moment(a.start.date || a.start.dateTime);
-		const bDate = moment(b.start.date || a.start.dateTime);
+		const getDateFromEvent = (e: Event) =>
+			moment(e.start.date || e.start.dateTime);
+			
+		const aDate = getDateFromEvent(a);
+		const bDate = getDateFromEvent(b);
 
 		if (bDate.isAfter(aDate)) return -1;
 		if (bDate.isSame(aDate)) return 0;
 		return 1;
 	});
+	console.log(events.map((event) => event.start));
+	console.log("--------------------");
 
 	// Loop all events to store first month and discord embed entries.
 	const allMonths: Record<string, moment.Moment[]> = {}; // All months.
