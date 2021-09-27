@@ -30,9 +30,7 @@ const loopExecute: SlashCommandExecute = async (client, interaction) => {
 				);
 
 				job = createJob(async () => {
-					await interaction.followUp({
-						content: "⏰ Daily events incoming!!",
-					});
+					await interaction.channel.send("⏰ Daily events incoming!!");
 					await eventCommand.execute(client, interaction);
 				}, cronString);
 
